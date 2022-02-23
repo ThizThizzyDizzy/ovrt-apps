@@ -1,0 +1,162 @@
+body {
+ /*  background-color: #646464; */
+  background-color: #333333;
+  font-family: 'Segoe UI', sans-serif;
+}
+button{
+  position: fixed;
+  font-size: 24px;
+  background-color: #999999;
+  color: #333333;
+  border: 1px solid #333333;
+  user-select: none;
+}
+button:hover{
+  background-color: #DADADA;
+}
+button:active{
+  background-color: #6B6B6B;
+}
+label{
+  display: flex;
+  align-items: center;
+  position: fixed;
+  background-color: #7F7F7F;
+  color: #222222;
+  left: 0%;
+  right: 0%;
+  user-select: none;
+}
+.header{
+  font-size: 18px;
+  padding-left: 1.25%;
+  top: 0%;
+  bottom: 95%;
+}
+.status{
+  font-size: 20px;
+  padding-left: 2.5%;
+  top: 90%;
+  bottom: 0%;
+}
+.detach{
+  font-size: 40px;
+  left: 0%;
+  top: 5%;
+  width: 50%;
+  bottom: 75%;
+}
+.attach{
+  font-size: 40px;
+  left: 50%;
+  top: 5%;
+  width: 50%;
+  bottom: 75%;
+}
+.toggle-anchor{
+  left: 0%;
+  top: 25%;
+  width: 25%;
+  height: 19.75%;
+}
+.toggle-snap{
+  left: 25%;
+  top: 25%;
+  width: 25%;
+  height: 19.75%;
+}
+.toggle-flat{
+  left: 0%;
+  top: 45.25%;
+  width: 25%;
+  height: 19.75%;
+}
+.toggle-lock{
+  left: 25%;
+  top: 45.25%;
+  width: 25%;
+  height: 19.75%;
+}
+.toggle-move{
+  font-size: 36px;
+  left: 0%;
+  top: 65%;
+  width: 50%;
+  bottom: 10%;
+}
+.equalize{
+  left: 50%;
+  top: 25%;
+  width: 50%;
+  height: 10%;
+}
+.straighten{
+  left: 50%;
+  top: 35%;
+  width: 25%;
+  height: 15%;
+}
+.flatten{
+  left: 75%;
+  top: 35%;
+  width: 25%;
+  height: 15%;
+}
+.arrange{
+  left: 50%;
+  top: 50%;
+  width: 25%;
+  height: 14.5%;
+}
+.arrange-flipped{
+  left: 75%;
+  top: 50%;
+  width: 25%;
+  height: 14.5%;
+}
+.curve{
+  background-color: #8F8F8F;
+  font-size: 22px;
+  left: 62.5%;
+  top: 65%;
+  width: 25%;
+  height: 12.5%;
+  justify-content: center;
+}
+.curve-more{
+  font-size: 48px;
+  left: 87.5%;
+  top: 65%;
+  width: 12.5%;
+  height: 12.5%;
+}
+.curve-less{
+  font-size: 48px;
+  left: 50%;
+  top: 65%;
+  width: 12.5%;
+  height: 12.5%;
+}
+.alpha{
+  background-color: #8F8F8F;
+  font-size: 22px;
+  left: 62.5%;
+  top: 77.5%;
+  width: 25%;
+  height: 12.5%;
+  justify-content: center;
+}
+.alpha-more{
+  font-size: 48px;
+  left: 87.5%;
+  top: 77.5%;
+  width: 12.5%;
+  height: 12.5%;
+}
+.alpha-less{
+  font-size: 48px;
+  left: 50%;
+  top: 77.5%;
+  width: 12.5%;
+  height: 12.5%;
+}

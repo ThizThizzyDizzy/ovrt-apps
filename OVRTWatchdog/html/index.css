@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css?family=Catamaran:400,700&display=swap');
+
+body {
+  background-color: #4D5057;
+  font-family: 'Catamaran', sans-serif;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.title {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.input {
+  width: 400px;
+  margin: 0 auto;
+  font-family: 'Catamaran', sans-serif;
+  font-size: 1.4em;
+  margin-top: 20px;
+}
+
+.input input {
+  width: 370px;
+  height: 80px;
+  font-family: 'Catamaran', sans-serif;
+  font-size: 1.8em;
+  background-color: transparent;
+  border: none;
+  border-top: 3px solid #9146FF;
+  border-bottom: 3px solid #9146FF;
+  outline: none;
+  color: #ffffff;
+  padding-left: 10px;
+}
+
+.the-big-button {
+  display: block;
+  margin: 30px auto 0 auto;
+  text-align: center;
+	box-shadow: inset 0px 1px 0px 0px #e184f3;
+	background: linear-gradient(to bottom, #c123de 5%, #a20dbd 100%);
+	background-color: #c123de;
+	border-radius: 6px;
+	border: 1px solid #a511c0;
+	cursor: pointer;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 40px;
+	font-weight: bold;
+	padding: 20px 40px;
+	text-decoration:none;
+	text-shadow: 0px 1px 0px #9b14b3;
+}
+
+.the-big-button:hover {
+	background: linear-gradient(to bottom, #a20dbd 5%, #c123de 100%);
+	background-color: #a20dbd;
+}
+
+.the-big-button:active {
+	position: relative;
+	top: 1px;
+}
+
+.footer {
+  margin-top: 70px;
+  margin-left: 10px;
+  font-size: 13px;
+}
