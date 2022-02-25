@@ -106,7 +106,7 @@ API.on("overlay-changed", async function (event){
         let sdr = Math.abs(sdrx)+Math.abs(sdry)+Math.abs(sdrz);
         let selfDist = Math.sqrt(sdx*sdx+sdy*sdy+sdz*sdz);
         let anchorMoving = selfDist>.00001;//||sdr>1;
-        if(numFast===0&&!anchorMoving&&!refreshNeeded)return;//nothing's moved; do nothing
+//        if(numFast===0&&!anchorMoving&&!refreshNeeded)return;//nothing's moved; do nothing CAUSES A BUNCH OF ISSUES
         if(snapEnabled){
             if(numFast===1){//exactly one being moved
                 let holding = data.linkedWindows[fastest];
