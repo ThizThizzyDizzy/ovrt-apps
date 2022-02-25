@@ -55,7 +55,7 @@ function FileContents(contents) {
     }else{
         for (;lastLine < lines.length; lastLine++) {
             var line = lines[lastLine];
-            if(line.includes("Exception")||line.includes("Error")||line.includes("Custom App")||line.includes("permissions.json")||line.includes("[WebAPI]")){
+            if(line.includes("Exception")||line.includes("Error")||line.includes("Custom App")||line.includes("permissions.json")||line.startsWith("[WebAPI]")||line.startsWith("OSC: ")){
                 body += line+"\n";
             }
         }
