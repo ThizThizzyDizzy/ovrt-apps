@@ -57,32 +57,44 @@ label{
   left: 0%;
   top: 25%;
   width: 25%;
-  height: 19.75%;
+  height: 17.5%;
 }
 .toggle-snap{
   left: 25%;
   top: 25%;
   width: 25%;
-  height: 19.75%;
+  height: 17.5%;
 }
 .toggle-flat{
   left: 0%;
-  top: 45.25%;
+  top: 42.5%;
   width: 25%;
-  height: 19.75%;
+  height: 17.5%;
 }
 .toggle-lock{
   left: 25%;
-  top: 45.25%;
+  top: 42.5%;
   width: 25%;
-  height: 19.75%;
+  height: 17.5%;
 }
 .toggle-move{
   font-size: 36px;
   left: 0%;
-  top: 65%;
+  top: 60%;
   width: 50%;
-  bottom: 10%;
+  height: 22%;
+}
+.settings{
+  left: 0%;
+  top: 82%;
+  width: 50%;
+  height: 8%;
+}
+.osc-settings{
+  left: 50%;
+  top: 82%;
+  width: 50%;
+  height: 8%;
 }
 .equalize{
   left: 50%;
@@ -159,4 +171,80 @@ label{
   top: 77.5%;
   width: 12.5%;
   height: 12.5%;
+}
+.aspect-ratio-header{
+  background-color: #8F8F8F;
+  left: 7.5%;
+  top: 5.25%;
+  width: 35%;
+  height: 5.5%;
+  justify-content: center;
+}
+.aspect-ratio{
+  background-color: #8f8f8f;
+  font-size: 24px;
+  left: 7.5%;
+  top: 10.75%;
+  width: 35%;
+  height: 9.5%;
+  justify-content: center;
+}
+.inc-asp-x{
+  left: 0%;
+  top: 5.25%;
+  width: 7.5%;
+  height: 7.5%;
+}
+.dec-asp-x{
+  left: 0%;
+  top: 12.75%;
+  width: 7.5%;
+  height: 7.5%;
+}
+.inc-asp-y{
+  left: 42.5%;
+  top: 5.25%;
+  width: 7.5%;
+  height: 7.5%;
+}
+.dec-asp-y{
+  left: 42.5%;
+  top: 12.75%;
+  width: 7.5%;
+  height: 7.5%;
+}
+.lerped-header{
+  background-color: #8F8F8F;
+  left: 50%;
+  top: 5.25%;
+  width: 50%;
+  height: 5.5%;
+  justify-content: center;
+}
+.lerped{
+  background-color: #8f8f8f;
+  font-size: 24px;
+  left: 59.5%;
+  top: 10.75%;
+  width: 31%;
+  height: 9.5%;
+  justify-content: center;
+}
+.dec-lerp{
+  left: 50%;
+  top: 10.75%;
+  width: 9.5%;
+  height: 9.5%;
+}
+.inc-lerp{
+  left: 90.5%;
+  top: 10.75%;
+  width: 9.5%;
+  height: 9.5%;
+}
+.adv-smooth{
+  left: 50%;
+  top: 20.25%;
+  width: 50%;
+  height: 9.75%;
 }

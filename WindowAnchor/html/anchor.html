@@ -6,24 +6,48 @@
   </head>
   <body>
     <label class="header" id="header">Starting Up</label>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Attach the nearest window')" class="attach" onclick="attach()">Attach</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Detach the farthest window')" class="detach" onclick="detach()">Detach</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Adjust window positions')" class="toggle-anchor" id="toggle-anchor" onclick="toggleAnchor(true)">Adjust Offsets</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Snap to window edges while adjusting')" class="toggle-snap" id="toggle-snap" onclick="toggleSnap()">Enable Snapping</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Equalize size, curve, and opacity')" class="equalize" onclick="equalizeWindows()">Equalize Transforms</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Straighten windows (set roll to 0)')" class="straighten" onclick="straightenWindows()">Straighten</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Flatten windows (set pitch and roll to 0)')" class="flatten" onclick="flattenWindows()">Flatten</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Arrange all windows')" class="arrange" onclick="arrangeWindows()">Arrange</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Arrange all windows; reversed order')" class="arrange-flipped" onclick="arrangeWindows(true)">Arrange Inverted</button>
-    <label class="curve">Curve</label>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease window curvature by 5%')" class="curve-less" onclick="lessCurve()">−</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase window curvature by 5%')" class="curve-more" onclick="moreCurve()">+</button>
-    <label class="alpha">Opacity</label>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease window opacity by 5%')" class="alpha-less" onclick="lessOpacity()">−</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase window opacity by 5%')" class="alpha-more" onclick="moreOpacity()">+</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Lock Pitch/Roll rotation')" class="toggle-flat" id="toggle-flat" onclick="toggleFlat()">Lock Rotation</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip('Lock movement')" class="toggle-lock" id="toggle-lock" onclick="toggleLock()">Lock</button>
-    <button onmouseout="resetTooltip()" onmouseover="tooltip(moveAny?'Limit movement to anchor only':'Allow movement by any window (Unstable)')" class="toggle-move" id="toggle-move" onclick="toggleMove()">Grab Anchor<br>to Move</button>
+    <div id="div-main">
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Attach the nearest window')" class="attach" onclick="attach()">Attach</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Detach the farthest window')" class="detach" onclick="detach()">Detach</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Adjust window positions')" class="toggle-anchor" id="toggle-anchor" onclick="toggleAnchor(true)">Adjust Offsets</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Snap to window edges while adjusting')" class="toggle-snap" id="toggle-snap" onclick="toggleSnap()">Enable Snapping</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Equalize size, curve, and opacity')" class="equalize" onclick="equalizeWindows()">Equalize Transforms</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Straighten windows (set roll to 0)')" class="straighten" onclick="straightenWindows()">Straighten</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Flatten windows (set pitch and roll to 0)')" class="flatten" onclick="flattenWindows()">Flatten</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Arrange all windows')" class="arrange" onclick="arrangeWindows()">Arrange</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Arrange all windows; reversed order')" class="arrange-flipped" onclick="arrangeWindows(true)">Arrange Inverted</button>
+      <label class="curve">Curve</label>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease window curvature by 5%')" class="curve-less" onclick="lessCurve()">−</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase window curvature by 5%')" class="curve-more" onclick="moreCurve()">+</button>
+      <label class="alpha">Opacity</label>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease window opacity by 5%')" class="alpha-less" onclick="lessOpacity()">−</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase window opacity by 5%')" class="alpha-more" onclick="moreOpacity()">+</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Lock Pitch/Roll rotation')" class="toggle-flat" id="toggle-flat" onclick="toggleFlat()">Lock Rotation</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Lock movement')" class="toggle-lock" id="toggle-lock" onclick="toggleLock()">Lock</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip(moveAny?'Limit movement to anchor only':'Allow movement by any window (Unstable)')" class="toggle-move" id="toggle-move" onclick="toggleMove()">Grab Anchor<br>to Move</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Advanced Settings Menu')" class="settings" onclick="switchMenu('div-main', 'div-settings')">Advanced Settings</button>
+    </div>
+    <div id="div-settings" hidden>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Back to the main menu')" class="settings" onclick="switchMenu('div-settings', 'div-main')">Done</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('VRChat OSC Settings Menu')" class="osc-settings" onclick="switchMenu('div-settings', 'div-osc')">OSC Settings</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease aspect ratio X')" class="dec-asp-x" onclick="decAspX()">−</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase aspect ratio X')" class="inc-asp-x" onclick="incAspX()">+</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease aspect ratio Y')" class="dec-asp-y" onclick="decAspY()">−</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase aspect ratio Y')" class="inc-asp-y" onclick="incAspY()">+</button>
+      <label class="aspect-ratio-header">Aspect Ratio (Snapping)</label>
+      <label class="aspect-ratio" id="aspect-ratio">Loading</label>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase window smoothing')" class="inc-lerp" onclick="incLerp()">+</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease window smoothing')" class="dec-lerp" onclick="decLerp()">−</button>
+      <label class="lerped-header">Window Smoothing</label>
+      <label class="lerped" id="lerp-smoothing">Loading</label>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Smooths only small movements')" class="adv-smooth" id="advanced-smoothing" onclick="microSmooth()">Stabilization OFF</button>
+    </div>
+    <div id="div-osc" hidden>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Back to Advanced Settings')" class="osc-settings" onclick="switchMenu('div-osc', 'div-settings')">Back</button>
+      <br>
+      OSC messages for pos/rot, curve/opacity/size, device pos/rot<br>
+      (as ints or floats)<br>
+    </div>
     <label class="status" id="status">Waiting for Initialization</label>
     <script src="js/helper.js"></script>
     <script src="js/anchor.js"></script>

@@ -12,9 +12,27 @@ var data = JSON.parse(storage.getItem("anchor_"+anchorID));
 if(!data){
     data = {
         linkedWindows:{},
-        lockedRot:{}
+        lockedRot:{},
+        aspectRatio:{
+            x:16,
+            y:9
+        },
+        lerping: 0,
+        microSmooth: false
     };
 }
+if(!data.aspectRatio){
+    data.aspectRatio = {
+        x:16,
+        y:9
+    };
+}
+if(!data.lerping){
+    data.lerping = 0;
+}
+updateAspectRatio();
+updateLerp();
+updateMicroSmooth();
 var anchorEnabled = true;
 var snapEnabled = false;
 var lockRot = false;
@@ -24,10 +42,6 @@ var lockedRot = data.lockedRot;
 var uid = -1;
 var snapDist = 0.05;//5cm
 var maxDist = 50;
-var aspectRatio = {
-    x:16,
-    y:9
-};
 var selfTransform = {};
 const rad = Math.PI / 180;
 var startingUp = true;
@@ -189,17 +203,17 @@ API.on("overlay-changed", async function (event){
                         let lockPitch = ref.transform.rotZ!==0;
                         holding.overlay.setPosition(ref.transform.posX,ref.transform.posY,ref.transform.posZ);
                         holding.overlay.setRotation(ref.transform.rotX,ref.transform.rotY,ref.transform.rotZ);
-                        holding.overlay.translateUp(ref.transform.size/2*aspectRatio.y/aspectRatio.x);
+                        holding.overlay.translateUp(ref.transform.size/2*data.aspectRatio.y/data.aspectRatio.x);
                         if(!lockPitch)holding.overlay.setRotation(holding.transform.rotX,ref.transform.rotY,ref.transform.rotZ);
-                        holding.overlay.translateUp(holding.transform.size/2*aspectRatio.y/aspectRatio.x);
+                        holding.overlay.translateUp(holding.transform.size/2*data.aspectRatio.y/data.aspectRatio.x);
                     }
                     if(getDist(refPoints.bottom, holdingPoints.top)<snapDist){//snap to bottom
                         let lockPitch = ref.transform.rotZ!==0;
                         holding.overlay.setPosition(ref.transform.posX,ref.transform.posY,ref.transform.posZ);
                         holding.overlay.setRotation(ref.transform.rotX,ref.transform.rotY,ref.transform.rotZ);
-                        holding.overlay.translateUp(-ref.transform.size/2*aspectRatio.y/aspectRatio.x);
+                        holding.overlay.translateUp(-ref.transform.size/2*data.aspectRatio.y/data.aspectRatio.x);
                         if(!lockPitch)holding.overlay.setRotation(holding.transform.rotX,ref.transform.rotY,ref.transform.rotZ);
-                        holding.overlay.translateUp(-holding.transform.size/2*aspectRatio.y/aspectRatio.x);
+                        holding.overlay.translateUp(-holding.transform.size/2*data.aspectRatio.y/data.aspectRatio.x);
                     }
                 }
             }
@@ -262,7 +276,7 @@ API.on("overlay-changed", async function (event){
                 try{
                     let thisQuat = toQuat(transform.rotX, transform.rotY, transform.rotZ);
                     let offset = data.linkedWindows[wid].offset;
-                    let newRot = mulQuat(divQuat(thisQuat, offset.orgRot), offset.targRot);
+                    let newRot = normQuat(mulQuat(divQuat(thisQuat, offset.orgRot), offset.targRot));
                     let euler = toEuler(newRot);
                     let ox = offset.posX;
                     let oy = offset.posY;
@@ -280,6 +294,35 @@ API.on("overlay-changed", async function (event){
                     let posX = transform.posX+ox;
                     let posY = transform.posY+oy;
                     let posZ = transform.posZ+oz;
+                    if(data.lerping>0||data.microSmooth){
+                        let lerping = Math.max(0.1, data.lerping);
+                        let amount = 1-(lerping/100);
+                        let tf = await data.linkedWindows[wid].overlay.getTransform();
+                        let dx = tf.posX-posX;
+                        let dy = tf.posY-posY;
+                        let dz = tf.posZ-posZ;
+                        let dp = Math.sqrt(dx*dx+dy*dy+dz*dz)*25;
+                        if(data.microSmooth&&dp>0){
+                            amount/=Math.max(1,1/dp);
+                        }
+                        posX = lerp(tf.posX, posX, amount);
+                        posY = lerp(tf.posY, posY, amount);
+                        posZ = lerp(tf.posZ, posZ, amount);
+//                        let q1 = normQuat(toQuat(tf.rotX, tf.rotY, tf.rotZ));
+//                        let q3 = normQuat({
+//                            w: lerp(q1.w, newRot.w, amount),
+//                            x: lerp(q1.x, newRot.x, amount),
+//                            y: lerp(q1.y, newRot.y, amount),
+//                            z: lerp(q1.z, newRot.z, amount)
+//                        });
+//                        let e2 = toEuler(q3);
+//                        euler[0] = e2[0];
+//                        euler[1] = e2[1];
+//                        euler[2] = e2[2];
+                        euler[0] = lerpe(tf.rotX, euler[0], amount);
+                        euler[1] = lerpe(tf.rotY, euler[1], amount);
+                        euler[2] = lerpe(tf.rotZ, euler[2], amount);
+                    }
                     data.linkedWindows[wid].overlay.setPosition(posX,posY,posZ);
                     data.linkedWindows[wid].overlay.setRotation(euler[0], euler[1], euler[2]);
                     data.linkedWindows[wid].overlay.getTransform().then(trnsfrm => {
@@ -294,6 +337,23 @@ API.on("overlay-changed", async function (event){
         }
     }
 });
+function lerp(y1, y2, x){
+    return y1+(y2-y1)*x;
+}
+function lerpe(y1, y2, x){
+    if(y1<=-180)y1+=360;
+    if(y2<=-180)y2+=360;
+    if(y1>180)y1-=360;
+    if(y2>180)y2-=360;
+    if(y1<-90&&y2>90)return lerpe2(y1, y2, x);
+    if(y2<-90&&y1>90)return lerpe2(y2, y1, 1-x);
+    return lerp(y1,y2,x);
+}
+function lerpe2(y1, y2, x){//y2 >90, y1 <-90, interpolate through +-180
+    let v = lerp(y1, y2-360, x);
+    if(v<=-180)v+=360;
+    return v;
+}
 function rotatePoint(px, py, ang, ox, oy){
     let x = px-ox, y = py-oy;
     let s = Math.sin(ang*rad);
@@ -791,8 +851,8 @@ async function getUtilityOverlay(transform){
         utility.setInputBlocked(true);
         utility.setContent(0, {
             url: "utility.html",
-            width: aspectRatio.x,
-            height: aspectRatio.y
+            width: data.aspectRatio.x,
+            height: data.aspectRatio.y
         });
     }
     if(transform){
@@ -845,7 +905,7 @@ async function getAnchorPoints(window){
     };
     overlay.setPosition(tf.posX, tf.posY, tf.posZ);
     
-    overlay.translateUp(tf.size/2*aspectRatio.y/aspectRatio.x);
+    overlay.translateUp(tf.size/2*data.aspectRatio.y/data.aspectRatio.x);
     let top = await overlay.getTransform();
     points.top = {
         posX: top.posX,
@@ -857,7 +917,7 @@ async function getAnchorPoints(window){
     };
     overlay.setPosition(tf.posX, tf.posY, tf.posZ);
     
-    overlay.translateUp(-tf.size/2*aspectRatio.y/aspectRatio.x);
+    overlay.translateUp(-tf.size/2*data.aspectRatio.y/data.aspectRatio.x);
     let bottom = await overlay.getTransform();
     points.bottom = {
         posX: bottom.posX,
@@ -869,6 +929,59 @@ async function getAnchorPoints(window){
     };
     overlay.setPosition(0, 1000, 0);
     return points;
+}
+function switchMenu(from, to){
+  document.getElementById(from).hidden = true;
+  document.getElementById(to).hidden = false;
+}
+function updateAspectRatio(){
+    document.getElementById("aspect-ratio").innerHTML = data.aspectRatio.x+":"+data.aspectRatio.y;
+}
+function incAspX(){
+    data.aspectRatio.x++;
+    updateAspectRatio();
+    save();
+}
+function decAspX(){
+    if(data.aspectRatio.x<=1)return;
+    data.aspectRatio.x--;
+    updateAspectRatio();
+    save();
+}
+function incAspY(){
+    data.aspectRatio.y++;
+    updateAspectRatio();
+    save();
+}
+function decAspY(){
+    if(data.aspectRatio.y<=1)return;
+    data.aspectRatio.y--;
+    updateAspectRatio();
+    save();
+}
+function updateLerp(){
+    document.getElementById("lerp-smoothing").innerHTML = data.lerping+"%";
+}
+function incLerp(){
+    if(data.lerping>=100)return;
+    data.lerping+=5;
+    updateLerp();
+    save();
+}
+function decLerp(){
+    if(data.lerping<=0)return;
+    data.lerping-=5;
+    updateLerp();
+    save();
+}
+function updateMicroSmooth(){
+    document.getElementById("advanced-smoothing").innerHTML = "Stabilization "+(data.microSmooth?"ON":"OFF");
+}
+function microSmooth(){
+    document.getElementById("advanced-smoothing").innerHTML = "Stabilization "+(data.microSmooth?"ON":"OFF");
+    data.microSmooth = !data.microSmooth;
+    updateMicroSmooth();
+    save();
 }
 /*
  * Quaternion functions below are modified from quaternion.js
