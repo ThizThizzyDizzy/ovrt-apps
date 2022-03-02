@@ -17,6 +17,13 @@ button:hover{
 button:active{
   background-color: #6B6B6B;
 }
+input{
+  position: fixed;
+  font-size: 14px;
+  background-color: #999999;
+  color: #333333;
+  border: 4px solid #555555;
+}
 label{
   display: flex;
   align-items: center;
@@ -247,4 +254,437 @@ label{
   top: 20.25%;
   width: 50%;
   height: 9.75%;
+}
+.osc-switch-menu{
+  left: 0%;
+  top: 5.25%;
+  width: 50%;
+  height: 6.75%;
+}
+.osc-label{
+  background-color: #8F8F8F;
+  left: 57.5%;
+  top: 5.25%;
+  width: 35%;
+  height: 6.75%;
+  justify-content: center;
+}
+.osc-prev{
+  left: 50%;
+  top: 5.25%;
+  width: 7.5%;
+  height: 6.75%;
+}
+.osc-next{
+  left: 92.5%;
+  top: 5.25%;
+  width: 7.5%;
+  height: 6.75%;
+}
+.osc-lbl1{
+  background-color: #8F8F8F;
+  justify-content: center;
+  left: 0%;
+  top: 12%;
+  font-size: 14px;
+  height: 7%;
+  width: 7%;
+}
+.osc-lbl2{
+  background-color: #8F8F8F;
+  justify-content: center;
+  left: 0%;
+  top: 19%;
+  font-size: 14px;
+  height: 7%;
+  width: 7%;
+}
+.osc-lbl3{
+  background-color: #8F8F8F;
+  justify-content: center;
+  left: 0%;
+  top: 26%;
+  font-size: 14px;
+  height: 7%;
+  width: 7%;
+}
+.osc-lbl4{
+  background-color: #8F8F8F;
+  justify-content: center;
+  left: 0%;
+  top: 33%;
+  font-size: 14px;
+  height: 7%;
+  width: 7%;
+}
+.osc-lbl5{
+  background-color: #8F8F8F;
+  justify-content: center;
+  left: 0%;
+  top: 40%;
+  font-size: 14px;
+  height: 7%;
+  width: 7%;
+}
+.osc-lbl6{
+  background-color: #8F8F8F;
+  justify-content: center;
+  left: 0%;
+  top: 47%;
+  font-size: 14px;
+  height: 7%;
+  width: 7%;
+}
+.osc-lbl7{
+  background-color: #8F8F8F;
+  justify-content: center;
+  left: 0%;
+  top: 54%;
+  font-size: 14px;
+  height: 7%;
+  width: 7%;
+}
+.osc-lbl8{
+  background-color: #8F8F8F;
+  justify-content: center;
+  left: 0%;
+  top: 61%;
+  font-size: 14px;
+  height: 7%;
+  width: 7%;
+}
+.osc-lbl9{
+  background-color: #8F8F8F;
+  justify-content: center;
+  left: 0%;
+  top: 68%;
+  font-size: 14px;
+  height: 7%;
+  width: 7%;
+}
+.osc-lbl10{
+  background-color: #8F8F8F;
+  justify-content: center;
+  left: 0%;
+  top: 75%;
+  font-size: 14px;
+  height: 7%;
+  width: 7%;
+}
+.osc-prefix{
+  left: 0%;
+  top: 82%;
+  font-size: 14px;
+  height: 6%;
+  width: 48.5%;
+}
+.osc1{
+  left: 7%;
+  top: 12%;
+  height: 5.5%;
+  width: 48.5%;
+}
+.osc2{
+  left: 7%;
+  top: 19%;
+  height: 5.5%;
+  width: 48.5%;
+}
+.osc3{
+  left: 7%;
+  top: 26%;
+  height: 5.5%;
+  width: 48.5%;
+}
+.osc4{
+  left: 7%;
+  top: 33%;
+  height: 5.5%;
+  width: 48.5%;
+}
+.osc5{
+  left: 7%;
+  top: 40%;
+  height: 5.5%;
+  width: 48.5%;
+}
+.osc6{
+  left: 7%;
+  top: 47%;
+  height: 5.5%;
+  width: 48.5%;
+}
+.osc7{
+  left: 7%;
+  top: 54%;
+  height: 5.5%;
+  width: 48.5%;
+}
+.osc8{
+  left: 7%;
+  top: 61%;
+  height: 5.5%;
+  width: 48.5%;
+}
+.osc9{
+  left: 7%;
+  top: 68%;
+  height: 5.5%;
+  width: 48.5%;
+}
+.osc10{
+  left: 7%;
+  top: 75%;
+  height: 5.5%;
+  width: 48.5%;
+}
+.osc-type1{
+  left: 57%;
+  top: 12%;
+  height: 7%;
+  width: 15%;
+}
+.osc-type2{
+  left: 57%;
+  top: 19%;
+  height: 7%;
+  width: 15%;
+}
+.osc-type3{
+  left: 57%;
+  top: 26%;
+  height: 7%;
+  width: 15%;
+}
+.osc-type4{
+  left: 57%;
+  top: 33%;
+  height: 7%;
+  width: 15%;
+}
+.osc-type5{
+  left: 57%;
+  top: 40%;
+  height: 7%;
+  width: 15%;
+}
+.osc-type6{
+  left: 57%;
+  top: 47%;
+  height: 7%;
+  width: 15%;
+}
+.osc-type7{
+  left: 57%;
+  top: 54%;
+  height: 7%;
+  width: 15%;
+}
+.osc-type8{
+  left: 57%;
+  top: 61%;
+  height: 7%;
+  width: 15%;
+}
+.osc-type9{
+  left: 57%;
+  top: 68%;
+  height: 7%;
+  width: 15%;
+}
+.osc-type10{
+  left: 57%;
+  top: 75%;
+  height: 7%;
+  width: 15%;
+}
+.osc-range-inc1{
+  left: 72%;
+  top: 12%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-inc2{
+  left: 72%;
+  top: 19%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-inc3{
+  left: 72%;
+  top: 26%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-inc4{
+  left: 72%;
+  top: 33%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-inc5{
+  left: 72%;
+  top: 40%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-inc6{
+  left: 72%;
+  top: 47%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-inc7{
+  left: 72%;
+  top: 54%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-inc8{
+  left: 72%;
+  top: 61%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-inc9{
+  left: 72%;
+  top: 68%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-inc10{
+  left: 72%;
+  top: 75%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range1{
+  justify-content: center;
+  left: 79%;
+  top: 12%;
+  height: 7%;
+  width: 14%;
+}
+.osc-range2{
+  justify-content: center;
+  left: 79%;
+  top: 19%;
+  height: 7%;
+  width: 14%;
+}
+.osc-range3{
+  justify-content: center;
+  left: 79%;
+  top: 26%;
+  height: 7%;
+  width: 14%;
+}
+.osc-range4{
+  justify-content: center;
+  left: 79%;
+  top: 33%;
+  height: 7%;
+  width: 14%;
+}
+.osc-range5{
+  justify-content: center;
+  left: 79%;
+  top: 40%;
+  height: 7%;
+  width: 14%;
+}
+.osc-range6{
+  justify-content: center;
+  left: 79%;
+  top: 47%;
+  height: 7%;
+  width: 14%;
+}
+.osc-range7{
+  justify-content: center;
+  left: 79%;
+  top: 54%;
+  height: 7%;
+  width: 14%;
+}
+.osc-range8{
+  justify-content: center;
+  left: 79%;
+  top: 61%;
+  height: 7%;
+  width: 14%;
+}
+.osc-range9{
+  justify-content: center;
+  left: 79%;
+  top: 68%;
+  height: 7%;
+  width: 14%;
+}
+.osc-range10{
+  justify-content: center;
+  left: 79%;
+  top: 75%;
+  height: 7%;
+  width: 14%;
+}
+.osc-range-dec1{
+  left: 93%;
+  top: 12%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-dec2{
+  left: 93%;
+  top: 19%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-dec3{
+  left: 93%;
+  top: 26%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-dec4{
+  left: 93%;
+  top: 33%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-dec5{
+  left: 93%;
+  top: 40%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-dec6{
+  left: 93%;
+  top: 47%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-dec7{
+  left: 93%;
+  top: 54%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-dec8{
+  left: 93%;
+  top: 61%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-dec9{
+  left: 93%;
+  top: 68%;
+  height: 7%;
+  width: 7%;
+}
+.osc-range-dec10{
+  left: 93%;
+  top: 75%;
+  height: 7%;
+  width: 7%;
 }

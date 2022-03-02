@@ -44,9 +44,115 @@
     </div>
     <div id="div-osc" hidden>
       <button onmouseout="resetTooltip()" onmouseover="tooltip('Back to Advanced Settings')" class="osc-settings" onclick="switchMenu('div-osc', 'div-settings')">Back</button>
-      <br>
-      OSC messages for pos/rot, curve/opacity/size, device pos/rot<br>
-      (as ints or floats)<br>
+      <input type="text" class="osc-prefix" id="osc-prefix" value="/avatar/parameters/">
+      <div id="div-osc-windows">
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Switch to devices')" class="osc-switch-menu" onclick="switchMenu('div-osc-windows', 'div-osc-devices')">Windows</button>
+        <label class="osc-label">This window</label>
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Previous window')" class="osc-prev" onclick="oscPrevWindow()">&lt;</button>
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Next window')" class="osc-next" onclick="oscNextWindow()">&gt;</button>
+        <label class="osc-lbl1">X</label>
+        <label class="osc-lbl2">Y</label>
+        <label class="osc-lbl3">Z</label>
+        <label class="osc-lbl4">rX</label>
+        <label class="osc-lbl5">rY</label>
+        <label class="osc-lbl6">rZ</label>
+        <label class="osc-lbl7">LA</label>
+        <label class="osc-lbl8">Sz</label>
+        <label class="osc-lbl9">Cv</label>
+        <label class="osc-lbl10">Op</label>
+        <input type="text" class="osc1" id="osc-window-posx" value="posX"/>
+        <input type="text" class="osc2" id="osc-window-posy" value="posY"/>
+        <input type="text" class="osc3" id="osc-window-posz" value="posZ"/>
+        <input type="text" class="osc4" id="osc-window-rotx" value="rotX"/>
+        <input type="text" class="osc5" id="osc-window-roty" value="rotY"/>
+        <input type="text" class="osc6" id="osc-window-rotz" value="rotZ"/>
+        <input type="text" class="osc7" id="osc-window-angle" value="lookAngle"/>
+        <input type="text" class="osc8" id="osc-window-size" value="size"/>
+        <input type="text" class="osc9" id="osc-window-curve" value="curvature"/>
+        <input type="text" class="osc10" id="osc-window-alpha" value="opacity"/>
+        <button class="osc-type1" id="osc-window-posx-type" onclick="oscWindowPosXType()">Off</button>
+        <button class="osc-type2" id="osc-window-posy-type" onclick="oscWindowPosYType()">Off</button>
+        <button class="osc-type3" id="osc-window-posz-type" onclick="oscWindowPosZType()">Off</button>
+        <button class="osc-type4" id="osc-window-rotx-type" onclick="oscWindowRotXType()">Off</button>
+        <button class="osc-type5" id="osc-window-roty-type" onclick="oscWindowRotYType()">Off</button>
+        <button class="osc-type6" id="osc-window-rotz-type" onclick="oscWindowRotZType()">Off</button>
+        <button class="osc-type7" id="osc-window-angle-type" onclick="oscWindowAngleType()">Off</button>
+        <button class="osc-type8" id="osc-window-size-type" onclick="oscWindowSizeType()">Off</button>
+        <button class="osc-type9" id="osc-window-curve-type" onclick="oscWindowCurveType()">Off</button>
+        <button class="osc-type10" id="osc-window-alpha-type" onclick="oscWindowAlphaType()">Off</button>
+        <button class="osc-range-inc1" onclick="oscWindowPosXRangeInc()">+</button>
+        <button class="osc-range-inc2" onclick="oscWindowPosYRangeInc()">+</button>
+        <button class="osc-range-inc3" onclick="oscWindowPosZRangeInc()">+</button>
+        <button class="osc-range-inc4" onclick="oscWindowRotXRangeInc()">+</button>
+        <button class="osc-range-inc5" onclick="oscWindowRotYRangeInc()">+</button>
+        <button class="osc-range-inc6" onclick="oscWindowRotZRangeInc()">+</button>
+        <button class="osc-range-inc7" onclick="oscWindowAngleRangeInc()">+</button>
+        <button class="osc-range-inc8" onclick="oscWindowSizeRangeInc()">+</button>
+        <label class="osc-range1">±1</label>
+        <label class="osc-range2">±1</label>
+        <label class="osc-range3">±1</label>
+        <label class="osc-range4">±180</label>
+        <label class="osc-range5">±180</label>
+        <label class="osc-range6">±180</label>
+        <label class="osc-range7">0-90</label>
+        <label class="osc-range8">0-1</label>
+        <button class="osc-range-dec1" onclick="oscWindowPosXRangeDec()">−</button>
+        <button class="osc-range-dec2" onclick="oscWindowPosYRangeDec()">−</button>
+        <button class="osc-range-dec3" onclick="oscWindowPosZRangeDec()">−</button>
+        <button class="osc-range-dec4" onclick="oscWindowRotXRangeDec()">−</button>
+        <button class="osc-range-dec5" onclick="oscWindowRotYRangeDec()">−</button>
+        <button class="osc-range-dec6" onclick="oscWindowRotZRangeDec()">−</button>
+        <button class="osc-range-dec7" onclick="oscWindowAngleRangeDec()">−</button>
+        <button class="osc-range-dec8" onclick="oscWindowSizeRangeDec()">−</button>
+      </div>
+      <div id="div-osc-devices" hidden>
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Switch to windows')" class="osc-switch-menu" onclick="switchMenu('div-osc-devices', 'div-osc-windows')">Devices</button>
+        <label class="osc-label">Headset</label>
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Previous device')" class="osc-prev" onclick="oscPrevDevice()">&lt;</button>
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Next device')" class="osc-next" onclick="oscNextDevice()">&gt;</button>
+        <label class="osc-lbl1">X</label>
+        <label class="osc-lbl2">Y</label>
+        <label class="osc-lbl3">Z</label>
+        <label class="osc-lbl4">rX</label>
+        <label class="osc-lbl5">rY</label>
+        <label class="osc-lbl6">rZ</label>
+        <label class="osc-lbl7">tX</label>
+        <label class="osc-lbl8">tY</label>
+        <input type="text" class="osc1" id="osc-device-posx" value="posX"/>
+        <input type="text" class="osc2" id="osc-device-posy" value="posY"/>
+        <input type="text" class="osc3" id="osc-device-posz" value="posZ"/>
+        <input type="text" class="osc4" id="osc-device-rotx" value="rotX"/>
+        <input type="text" class="osc5" id="osc-device-roty" value="rotY"/>
+        <input type="text" class="osc6" id="osc-device-rotz" value="rotZ"/>
+        <input type="text" class="osc7" id="osc-device-trkx" value="trackpadX"/>
+        <input type="text" class="osc8" id="osc-device-trky" value="trackpadY"/>
+        <button class="osc-type1" id="osc-device-posx-type" onclick="oscDevicePosXType()">Off</button>
+        <button class="osc-type2" id="osc-device-posy-type" onclick="oscDevicePosYType()">Off</button>
+        <button class="osc-type3" id="osc-device-posz-type" onclick="oscDevicePosZType()">Off</button>
+        <button class="osc-type4" id="osc-device-rotx-type" onclick="oscDeviceRotXType()">Off</button>
+        <button class="osc-type5" id="osc-device-roty-type" onclick="oscDeviceRotYType()">Off</button>
+        <button class="osc-type6" id="osc-device-rotz-type" onclick="oscDeviceRotZType()">Off</button>
+        <button class="osc-type7" id="osc-device-trkx-type" onclick="oscDeviceTrkXType()">Off</button>
+        <button class="osc-type8" id="osc-device-trky-type" onclick="oscDeviceTrkYType()">Off</button>
+        <button class="osc-range-inc1" onclick="oscDevicePosXRangeInc()">+</button>
+        <button class="osc-range-inc2" onclick="oscDevicePosYRangeInc()">+</button>
+        <button class="osc-range-inc3" onclick="oscDevicePosZRangeInc()">+</button>
+        <button class="osc-range-inc4" onclick="oscDeviceRotXRangeInc()">+</button>
+        <button class="osc-range-inc5" onclick="oscDeviceRotYRangeInc()">+</button>
+        <button class="osc-range-inc6" onclick="oscDeviceRotZRangeInc()">+</button>
+        <label class="osc-range1">±1</label>
+        <label class="osc-range2">±1</label>
+        <label class="osc-range3">±1</label>
+        <label class="osc-range4">±180</label>
+        <label class="osc-range5">±180</label>
+        <label class="osc-range6">±180</label>
+        <button class="osc-range-dec1" onclick="oscDevicePosXRangeDec()">−</button>
+        <button class="osc-range-dec2" onclick="oscDevicePosYRangeDec()">−</button>
+        <button class="osc-range-dec3" onclick="oscDevicePosZRangeDec()">−</button>
+        <button class="osc-range-dec4" onclick="oscDeviceRotXRangeDec()">−</button>
+        <button class="osc-range-dec5" onclick="oscDeviceRotYRangeDec()">−</button>
+        <button class="osc-range-dec6" onclick="oscDeviceRotZRangeDec()">−</button>
+      </div>
     </div>
     <label class="status" id="status">Waiting for Initialization</label>
     <script src="js/helper.js"></script>
