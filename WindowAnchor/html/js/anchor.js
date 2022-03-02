@@ -18,7 +18,9 @@ if(!data){
             y:9
         },
         lerping: 0,
-        microSmooth: false
+        microSmooth: false,
+        deviceOSC:{
+        }
     };
 }
 if(!data.aspectRatio){
@@ -29,6 +31,10 @@ if(!data.aspectRatio){
 }
 if(!data.lerping){
     data.lerping = 0;
+}
+if(!data.deviceOSC){
+    data.deviceOSC = {
+    };
 }
 updateAspectRatio();
 updateLerp();
@@ -982,6 +988,404 @@ function microSmooth(){
     data.microSmooth = !data.microSmooth;
     updateMicroSmooth();
     save();
+}
+//OSC STUFF
+var oscCurrentWindow = 0;
+var oscCurrentDevice = 1;
+oscUpdateWindow();
+oscUpdateDevice();
+function oscDefWindow(){
+    return {
+        posX:{
+            text: "posX",
+            type: -1,
+            range: 1
+        },
+        posY:{
+            text: "posY",
+            type: -1,
+            range: 1
+        },
+        posZ:{
+            text: "posZ",
+            type: -1,
+            range: 1
+        },
+        rotX:{
+            text: "rotX",
+            type: -1,
+            range: 180
+        },
+        rotY:{
+            text: "rotY",
+            type: -1,
+            range: 180
+        },
+        rotZ:{
+            text: "rotZ",
+            type: -1,
+            range: 180
+        },
+        angle:{
+            text: "lookAngle",
+            type: -1,
+            range: 90
+        },
+        size:{
+            text: "size",
+            type: -1,
+            range: 1
+        },
+        curve:{
+            text: "curvature",
+            type: -1
+        },
+        alpha:{
+            text: "opacity",
+            type: -1
+        }
+    };
+}
+function oscDefDevice(){
+    return {
+        posX:{
+            text: "posX",
+            type: -1,
+            range: 1
+        },
+        posY:{
+            text: "posY",
+            type: -1,
+            range: 1
+        },
+        posZ:{
+            text: "posZ",
+            type: -1,
+            range: 1
+        },
+        rotX:{
+            text: "rotX",
+            type: -1,
+            range: 180
+        },
+        rotY:{
+            text: "rotY",
+            type: -1,
+            range: 180
+        },
+        rotZ:{
+            text: "rotZ",
+            type: -1,
+            range: 180
+        },
+        trkX:{
+            text: "trackpadX",
+            type: -1
+        },
+        trkY:{
+            text: "trackpadY",
+            type: -1
+        }
+    };
+}
+function oscTypeS(type){
+    if(type===-1)return "Off";
+    if(type===0)return "Int";
+    if(type===1)return "Float";
+    if(type===2)return "Bool";
+    return "OwO";
+}
+function oscUpdateWindow(){
+    let windowName = "Window";
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow===0)windowName = "This window";
+    else{
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        windowName = "Window "+wid;
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    document.getElementById("osc-window").innerHTML = windowName;
+    document.getElementById("osc-window-posx").value = osc.posX.text;
+    document.getElementById("osc-window-posy").value = osc.posY.text;
+    document.getElementById("osc-window-posz").value = osc.posZ.text;
+    document.getElementById("osc-window-rotx").value = osc.rotX.text;
+    document.getElementById("osc-window-roty").value = osc.rotY.text;
+    document.getElementById("osc-window-rotz").value = osc.rotZ.text;
+    document.getElementById("osc-window-angle").value = osc.angle.text;
+    document.getElementById("osc-window-size").value = osc.size.text;
+    document.getElementById("osc-window-curve").value = osc.curve.text;
+    document.getElementById("osc-window-alpha").value = osc.alpha.text;
+    
+    document.getElementById("osc-window-posx-type").innerHTML = oscTypeS(osc.posX.type);
+    document.getElementById("osc-window-posy-type").innerHTML = oscTypeS(osc.posY.type);
+    document.getElementById("osc-window-posz-type").innerHTML = oscTypeS(osc.posZ.type);
+    document.getElementById("osc-window-rotx-type").innerHTML = oscTypeS(osc.rotX.type);
+    document.getElementById("osc-window-roty-type").innerHTML = oscTypeS(osc.rotY.type);
+    document.getElementById("osc-window-rotz-type").innerHTML = oscTypeS(osc.rotZ.type);
+    document.getElementById("osc-window-angle-type").innerHTML = oscTypeS(osc.angle.type);
+    document.getElementById("osc-window-size-type").innerHTML = oscTypeS(osc.size.type);
+    document.getElementById("osc-window-curve-type").innerHTML = oscTypeS(osc.curve.type);
+    document.getElementById("osc-window-alpha-type").innerHTML = oscTypeS(osc.alpha.type);
+    
+    document.getElementById("osc-window-posx-range").innerHTML = "±"+osc.posX.range;
+    document.getElementById("osc-window-posy-range").innerHTML = "±"+osc.posY.range;
+    document.getElementById("osc-window-posz-range").innerHTML = "±"+osc.posZ.range;
+    document.getElementById("osc-window-rotx-range").innerHTML = "±"+osc.rotX.range;
+    document.getElementById("osc-window-roty-range").innerHTML = "±"+osc.rotY.range;
+    document.getElementById("osc-window-rotz-range").innerHTML = "±"+osc.rotZ.range;
+    document.getElementById("osc-window-angle-range").innerHTML = "0-"+osc.angle.range;
+    document.getElementById("osc-window-size-range").innerHTML = "0-"+osc.size.range;
+}
+function oscPrevWindow(){
+    if(oscCurrentWindow<=0)return;
+    oscCurrentWindow--;
+    oscUpdateWindow();
+}
+function oscNextWindow(){
+    if(oscCurrentWindow>=Object.keys(data.linkedWindows).length)return;
+    oscCurrentWindow++;
+    oscUpdateWindow();
+}
+function oscWindowType(key){
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow>0){
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    osc[key].type++;
+    if(osc[key].type>=2)osc[key].type = -1;
+    save();
+    document.getElementById("osc-window-posx-type").innerHTML = oscTypeS(osc.posX.type);
+    document.getElementById("osc-window-posy-type").innerHTML = oscTypeS(osc.posY.type);
+    document.getElementById("osc-window-posz-type").innerHTML = oscTypeS(osc.posZ.type);
+    document.getElementById("osc-window-rotx-type").innerHTML = oscTypeS(osc.rotX.type);
+    document.getElementById("osc-window-roty-type").innerHTML = oscTypeS(osc.rotY.type);
+    document.getElementById("osc-window-rotz-type").innerHTML = oscTypeS(osc.rotZ.type);
+    document.getElementById("osc-window-angle-type").innerHTML = oscTypeS(osc.angle.type);
+    document.getElementById("osc-window-size-type").innerHTML = oscTypeS(osc.size.type);
+    document.getElementById("osc-window-curve-type").innerHTML = oscTypeS(osc.curve.type);
+    document.getElementById("osc-window-alpha-type").innerHTML = oscTypeS(osc.alpha.type);
+}
+function oscWindowPosRangeInc(key){
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow>0){
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    osc[key].range++;
+    save();
+    document.getElementById("osc-window-posx-range").innerHTML = "±"+osc.posX.range;
+    document.getElementById("osc-window-posy-range").innerHTML = "±"+osc.posY.range;
+    document.getElementById("osc-window-posz-range").innerHTML = "±"+osc.posZ.range;
+}
+function oscWindowPosRangeDec(key){
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow>0){
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    if(osc[key].range<=1)return;
+    osc[key].range--;
+    save();
+    document.getElementById("osc-window-posx-range").innerHTML = "±"+osc.posX.range;
+    document.getElementById("osc-window-posy-range").innerHTML = "±"+osc.posY.range;
+    document.getElementById("osc-window-posz-range").innerHTML = "±"+osc.posZ.range;
+}
+function oscWindowRotRangeInc(key){
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow>0){
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    if(osc[key].range>=180)return;
+    osc[key].range+=90;
+    save();
+    document.getElementById("osc-window-rotx-range").innerHTML = "±"+osc.rotX.range;
+    document.getElementById("osc-window-roty-range").innerHTML = "±"+osc.rotY.range;
+    document.getElementById("osc-window-rotz-range").innerHTML = "±"+osc.rotZ.range;
+}
+function oscWindowRotRangeDec(key){
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow>0){
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    if(osc[key].range<=90)return;
+    osc[key].range-=90;
+    save();
+    document.getElementById("osc-window-rotx-range").innerHTML = "±"+osc.rotX.range;
+    document.getElementById("osc-window-roty-range").innerHTML = "±"+osc.rotY.range;
+    document.getElementById("osc-window-rotz-range").innerHTML = "±"+osc.rotZ.range;
+}
+function oscWindowAngleRangeInc(){
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow>0){
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    if(osc.angle.range>=180)return;
+    osc.angle.range+=15;
+    save();
+    document.getElementById("osc-window-angle-range").innerHTML = "0-"+osc.angle.range;
+}
+function oscWindowAngleRangeDec(){
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow>0){
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    if(osc.angle.range<=15)return;
+    osc.angle.range-=15;
+    save();
+    document.getElementById("osc-window-angle-range").innerHTML = "0-"+osc.angle.range;
+}
+function oscWindowSizeRangeInc(){
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow>0){
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    osc.size.range++;
+    save();
+    document.getElementById("osc-window-size-range").innerHTML = "0-"+osc.size.range;
+}
+function oscWindowSizeRangeDec(){
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow>0){
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    if(osc.size.range<=1)return;
+    osc.size.range--;
+    save();
+    document.getElementById("osc-window-size-range").innerHTML = "0-"+osc.size.range;
+}
+function oscUpdateDevice(){
+    let deviceName = "Device "+oscCurrentDevice;
+    if(oscCurrentDevice===1)deviceName = "Headset";
+    if(oscCurrentDevice===2)deviceName = "Left Controller";
+    if(oscCurrentDevice===3)deviceName = "Right Controller";
+    if(!data.deviceOSC[oscCurrentDevice]) data.deviceOSC[oscCurrentDevice] = oscDefDevice();
+    let osc = data.deviceOSC[oscCurrentDevice];
+    document.getElementById("osc-device").innerHTML = deviceName;
+    document.getElementById("osc-device-posx").value = osc.posX.text;
+    document.getElementById("osc-device-posy").value = osc.posY.text;
+    document.getElementById("osc-device-posz").value = osc.posZ.text;
+    document.getElementById("osc-device-rotx").value = osc.rotX.text;
+    document.getElementById("osc-device-roty").value = osc.rotY.text;
+    document.getElementById("osc-device-rotz").value = osc.rotZ.text;
+    document.getElementById("osc-device-trkx").value = osc.trkX.text;
+    document.getElementById("osc-device-trky").value = osc.trkY.text;
+    
+    document.getElementById("osc-device-posx-type").innerHTML = oscTypeS(osc.posX.type);
+    document.getElementById("osc-device-posy-type").innerHTML = oscTypeS(osc.posY.type);
+    document.getElementById("osc-device-posz-type").innerHTML = oscTypeS(osc.posZ.type);
+    document.getElementById("osc-device-rotx-type").innerHTML = oscTypeS(osc.rotX.type);
+    document.getElementById("osc-device-roty-type").innerHTML = oscTypeS(osc.rotY.type);
+    document.getElementById("osc-device-rotz-type").innerHTML = oscTypeS(osc.rotZ.type);
+    document.getElementById("osc-device-trkx-type").innerHTML = oscTypeS(osc.trkX.type);
+    document.getElementById("osc-device-trky-type").innerHTML = oscTypeS(osc.trkY.type);
+    
+    document.getElementById("osc-device-posx-range").innerHTML = "±"+osc.posX.range;
+    document.getElementById("osc-device-posy-range").innerHTML = "±"+osc.posY.range;
+    document.getElementById("osc-device-posz-range").innerHTML = "±"+osc.posZ.range;
+    document.getElementById("osc-device-rotx-range").innerHTML = "±"+osc.rotX.range;
+    document.getElementById("osc-device-roty-range").innerHTML = "±"+osc.rotY.range;
+    document.getElementById("osc-device-rotz-range").innerHTML = "±"+osc.rotZ.range;
+}
+function oscPrevDevice(){
+    if(oscCurrentDevice<=1)return;
+    oscCurrentDevice--;
+    oscUpdateDevice();
+}
+function oscNextDevice(){
+    oscCurrentDevice++;
+    if(!deviceUpdates[oscCurrentDevice])oscCurrentDevice--;
+    oscUpdateDevice();
+}
+function oscDeviceType(key){
+    if(!data.deviceOSC[oscCurrentDevice]) data.deviceOSC[oscCurrentDevice] = oscDefDevice();
+    let osc = data.deviceOSC[oscCurrentDevice];
+    osc[key].type++;
+    if(osc[key].type>=2)osc[key].type = -1;
+    save();
+    document.getElementById("osc-device-posx-type").innerHTML = oscTypeS(osc.posX.type);
+    document.getElementById("osc-device-posy-type").innerHTML = oscTypeS(osc.posY.type);
+    document.getElementById("osc-device-posz-type").innerHTML = oscTypeS(osc.posZ.type);
+    document.getElementById("osc-device-rotx-type").innerHTML = oscTypeS(osc.rotX.type);
+    document.getElementById("osc-device-roty-type").innerHTML = oscTypeS(osc.rotY.type);
+    document.getElementById("osc-device-rotz-type").innerHTML = oscTypeS(osc.rotZ.type);
+    document.getElementById("osc-device-trkx-type").innerHTML = oscTypeS(osc.trkX.type);
+    document.getElementById("osc-device-trky-type").innerHTML = oscTypeS(osc.trkY.type);
+}
+function oscDevicePosRangeInc(key){
+    if(!data.deviceOSC[oscCurrentDevice]) data.deviceOSC[oscCurrentDevice] = oscDefDevice();
+    let osc = data.deviceOSC[oscCurrentDevice];
+    osc[key].range++;
+    save();
+    document.getElementById("osc-device-posx-range").innerHTML = "±"+osc.posX.range;
+    document.getElementById("osc-device-posy-range").innerHTML = "±"+osc.posY.range;
+    document.getElementById("osc-device-posz-range").innerHTML = "±"+osc.posZ.range;
+}
+function oscDevicePosRangeDec(key){
+    if(!data.deviceOSC[oscCurrentDevice]) data.deviceOSC[oscCurrentDevice] = oscDefDevice();
+    let osc = data.deviceOSC[oscCurrentDevice];
+    if(osc[key].range<=1)return;
+    osc[key].range--;
+    save();
+    document.getElementById("osc-device-posx-range").innerHTML = "±"+osc.posX.range;
+    document.getElementById("osc-device-posy-range").innerHTML = "±"+osc.posY.range;
+    document.getElementById("osc-device-posz-range").innerHTML = "±"+osc.posZ.range;
+}
+function oscDeviceRotRangeInc(key){
+    if(!data.deviceOSC[oscCurrentDevice]) data.deviceOSC[oscCurrentDevice] = oscDefDevice();
+    let osc = data.deviceOSC[oscCurrentDevice];
+    if(osc[key].range>=180)return;
+    osc[key].range+=90;
+    save();
+    document.getElementById("osc-device-rotx-range").innerHTML = "±"+osc.rotX.range;
+    document.getElementById("osc-device-roty-range").innerHTML = "±"+osc.rotY.range;
+    document.getElementById("osc-device-rotz-range").innerHTML = "±"+osc.rotZ.range;
+}
+function oscDeviceRotRangeDec(key){
+    if(!data.deviceOSC[oscCurrentDevice]) data.deviceOSC[oscCurrentDevice] = oscDefDevice();
+    let osc = data.deviceOSC[oscCurrentDevice];
+    if(osc[key].range<=90)return;
+    osc[key].range-=90;
+    save();
+    document.getElementById("osc-device-rotx-range").innerHTML = "±"+osc.rotX.range;
+    document.getElementById("osc-device-roty-range").innerHTML = "±"+osc.rotY.range;
+    document.getElementById("osc-device-rotz-range").innerHTML = "±"+osc.rotZ.range;
 }
 /*
  * Quaternion functions below are modified from quaternion.js
