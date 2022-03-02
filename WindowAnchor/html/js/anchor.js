@@ -19,8 +19,8 @@ if(!data){
         },
         lerping: 0,
         microSmooth: false,
-        deviceOSC:{
-        }
+        deviceOSC:{},
+        oscPrefix: "/avatar/parameters/"
     };
 }
 if(!data.aspectRatio){
@@ -36,6 +36,8 @@ if(!data.deviceOSC){
     data.deviceOSC = {
     };
 }
+if(!data.oscPrefix)data.oscPrefix = "/avatar/parameters/";
+document.getElementById("osc-prefix").value = data.oscPrefix;
 updateAspectRatio();
 updateLerp();
 updateMicroSmooth();
@@ -1095,6 +1097,10 @@ function oscTypeS(type){
     if(type===2)return "Bool";
     return "OwO";
 }
+function oscPrefixChange(){
+    data.oscPrefix = document.getElementById("osc-prefix").value;
+    save();
+}
 function oscUpdateWindow(){
     let windowName = "Window";
     let wid = uid;
@@ -1108,12 +1114,12 @@ function oscUpdateWindow(){
         osc = data.linkedWindows[wid].osc;
     }
     document.getElementById("osc-window").innerHTML = windowName;
-    document.getElementById("osc-window-posx").value = osc.posX.text;
-    document.getElementById("osc-window-posy").value = osc.posY.text;
-    document.getElementById("osc-window-posz").value = osc.posZ.text;
-    document.getElementById("osc-window-rotx").value = osc.rotX.text;
-    document.getElementById("osc-window-roty").value = osc.rotY.text;
-    document.getElementById("osc-window-rotz").value = osc.rotZ.text;
+    document.getElementById("osc-window-posX").value = osc.posX.text;
+    document.getElementById("osc-window-posY").value = osc.posY.text;
+    document.getElementById("osc-window-posZ").value = osc.posZ.text;
+    document.getElementById("osc-window-rotX").value = osc.rotX.text;
+    document.getElementById("osc-window-rotY").value = osc.rotY.text;
+    document.getElementById("osc-window-rotZ").value = osc.rotZ.text;
     document.getElementById("osc-window-angle").value = osc.angle.text;
     document.getElementById("osc-window-size").value = osc.size.text;
     document.getElementById("osc-window-curve").value = osc.curve.text;
@@ -1171,6 +1177,18 @@ function oscWindowType(key){
     document.getElementById("osc-window-size-type").innerHTML = oscTypeS(osc.size.type);
     document.getElementById("osc-window-curve-type").innerHTML = oscTypeS(osc.curve.type);
     document.getElementById("osc-window-alpha-type").innerHTML = oscTypeS(osc.alpha.type);
+}
+function oscWindowChange(key){
+    let wid = uid;
+    if(!data.osc)data.osc = oscDefWindow();
+    let osc = data.osc;
+    if(oscCurrentWindow>0){
+        wid = Object.keys(data.linkedWindows)[oscCurrentWindow-1];
+        if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
+        osc = data.linkedWindows[wid].osc;
+    }
+    osc[key].text = document.getElementById("osc-window-"+key).value;
+    save();
 }
 function oscWindowPosRangeInc(key){
     let wid = uid;
@@ -1298,14 +1316,14 @@ function oscUpdateDevice(){
     if(!data.deviceOSC[oscCurrentDevice]) data.deviceOSC[oscCurrentDevice] = oscDefDevice();
     let osc = data.deviceOSC[oscCurrentDevice];
     document.getElementById("osc-device").innerHTML = deviceName;
-    document.getElementById("osc-device-posx").value = osc.posX.text;
-    document.getElementById("osc-device-posy").value = osc.posY.text;
-    document.getElementById("osc-device-posz").value = osc.posZ.text;
-    document.getElementById("osc-device-rotx").value = osc.rotX.text;
-    document.getElementById("osc-device-roty").value = osc.rotY.text;
-    document.getElementById("osc-device-rotz").value = osc.rotZ.text;
-    document.getElementById("osc-device-trkx").value = osc.trkX.text;
-    document.getElementById("osc-device-trky").value = osc.trkY.text;
+    document.getElementById("osc-device-posX").value = osc.posX.text;
+    document.getElementById("osc-device-posY").value = osc.posY.text;
+    document.getElementById("osc-device-posZ").value = osc.posZ.text;
+    document.getElementById("osc-device-rotX").value = osc.rotX.text;
+    document.getElementById("osc-device-rotY").value = osc.rotY.text;
+    document.getElementById("osc-device-rotZ").value = osc.rotZ.text;
+    document.getElementById("osc-device-trkX").value = osc.trkX.text;
+    document.getElementById("osc-device-trkY").value = osc.trkY.text;
     
     document.getElementById("osc-device-posx-type").innerHTML = oscTypeS(osc.posX.type);
     document.getElementById("osc-device-posy-type").innerHTML = oscTypeS(osc.posY.type);
@@ -1347,6 +1365,12 @@ function oscDeviceType(key){
     document.getElementById("osc-device-rotz-type").innerHTML = oscTypeS(osc.rotZ.type);
     document.getElementById("osc-device-trkx-type").innerHTML = oscTypeS(osc.trkX.type);
     document.getElementById("osc-device-trky-type").innerHTML = oscTypeS(osc.trkY.type);
+}
+function oscDeviceChange(key){
+    if(!data.deviceOSC[oscCurrentDevice]) data.deviceOSC[oscCurrentDevice] = oscDefDevice();
+    let osc = data.deviceOSC[oscCurrentDevice];
+    osc[key].text = document.getElementById("osc-device-"+key).value;
+    save();
 }
 function oscDevicePosRangeInc(key){
     if(!data.deviceOSC[oscCurrentDevice]) data.deviceOSC[oscCurrentDevice] = oscDefDevice();

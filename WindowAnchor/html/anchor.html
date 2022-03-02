@@ -44,7 +44,7 @@
     </div>
     <div id="div-osc" hidden>
       <button onmouseout="resetTooltip()" onmouseover="tooltip('Back to Advanced Settings')" class="osc-settings" onclick="switchMenu('div-osc', 'div-settings')">Back</button>
-      <input type="text" class="osc-prefix" id="osc-prefix" value="/avatar/parameters/">
+      <input type="text" class="osc-prefix" id="osc-prefix" value="/avatar/parameters/" onchange="oscPrefixChange()">
       <div id="div-osc-windows">
         <button onmouseout="resetTooltip()" onmouseover="tooltip('Switch to devices')" class="osc-switch-menu" onclick="switchMenu('div-osc-windows', 'div-osc-devices')">Windows</button>
         <label class="osc-label" id="osc-window">This window</label>
@@ -60,16 +60,16 @@
         <label class="osc-lbl8">Sz</label>
         <label class="osc-lbl9">Cv</label>
         <label class="osc-lbl10">Op</label>
-        <input type="text" class="osc1" id="osc-window-posx" value="posX"/>
-        <input type="text" class="osc2" id="osc-window-posy" value="posY"/>
-        <input type="text" class="osc3" id="osc-window-posz" value="posZ"/>
-        <input type="text" class="osc4" id="osc-window-rotx" value="rotX"/>
-        <input type="text" class="osc5" id="osc-window-roty" value="rotY"/>
-        <input type="text" class="osc6" id="osc-window-rotz" value="rotZ"/>
-        <input type="text" class="osc7" id="osc-window-angle" value="lookAngle"/>
-        <input type="text" class="osc8" id="osc-window-size" value="size"/>
-        <input type="text" class="osc9" id="osc-window-curve" value="curvature"/>
-        <input type="text" class="osc10" id="osc-window-alpha" value="opacity"/>
+        <input type="text" class="osc1" id="osc-window-posX" value="posX" onchange="oscWindowChange('posX')"/>
+        <input type="text" class="osc2" id="osc-window-posY" value="posY" onchange="oscWindowChange('posY')"/>
+        <input type="text" class="osc3" id="osc-window-posZ" value="posZ" onchange="oscWindowChange('posZ')"/>
+        <input type="text" class="osc4" id="osc-window-rotX" value="rotX" onchange="oscWindowChange('rotX')"/>
+        <input type="text" class="osc5" id="osc-window-rotY" value="rotY" onchange="oscWindowChange('rotY')"/>
+        <input type="text" class="osc6" id="osc-window-rotZ" value="rotZ" onchange="oscWindowChange('rotZ')"/>
+        <input type="text" class="osc7" id="osc-window-angle" value="lookAngle" onchange="oscWindowChange('angle')"/>
+        <input type="text" class="osc8" id="osc-window-size" value="size" onchange="oscWindowChange('size')"/>
+        <input type="text" class="osc9" id="osc-window-curve" value="curvature" onchange="oscWindowChange('curve')"/>
+        <input type="text" class="osc10" id="osc-window-alpha" value="opacity" onchange="oscWindowchange('alpha')"/>
         <button class="osc-type1" id="osc-window-posx-type" onclick="oscWindowType('posX')">Off</button>
         <button class="osc-type2" id="osc-window-posy-type" onclick="oscWindowType('posY')">Off</button>
         <button class="osc-type3" id="osc-window-posz-type" onclick="oscWindowType('posZ')">Off</button>
@@ -118,14 +118,14 @@
         <label class="osc-lbl6">rZ</label>
         <label class="osc-lbl7">tX</label>
         <label class="osc-lbl8">tY</label>
-        <input type="text" class="osc1" id="osc-device-posx" value="posX"/>
-        <input type="text" class="osc2" id="osc-device-posy" value="posY"/>
-        <input type="text" class="osc3" id="osc-device-posz" value="posZ"/>
-        <input type="text" class="osc4" id="osc-device-rotx" value="rotX"/>
-        <input type="text" class="osc5" id="osc-device-roty" value="rotY"/>
-        <input type="text" class="osc6" id="osc-device-rotz" value="rotZ"/>
-        <input type="text" class="osc7" id="osc-device-trkx" value="trackpadX"/>
-        <input type="text" class="osc8" id="osc-device-trky" value="trackpadY"/>
+        <input type="text" class="osc1" id="osc-device-posX" value="posX" onchange="oscDeviceChange('posX')"/>
+        <input type="text" class="osc2" id="osc-device-posY" value="posY" onchange="oscDeviceChange('posY')"/>
+        <input type="text" class="osc3" id="osc-device-posZ" value="posZ" onchange="oscDeviceChange('posZ')"/>
+        <input type="text" class="osc4" id="osc-device-rotX" value="rotX" onchange="oscDeviceChange('rotX')"/>
+        <input type="text" class="osc5" id="osc-device-rotY" value="rotY" onchange="oscDeviceChange('rotY')"/>
+        <input type="text" class="osc6" id="osc-device-rotZ" value="rotZ" onchange="oscDeviceChange('rotZ')"/>
+        <input type="text" class="osc7" id="osc-device-trkX" value="trackpadX" onchange="oscDeviceChange('trkX')"/>
+        <input type="text" class="osc8" id="osc-device-trkY" value="trackpadY" onchange="oscDeviceChange('trkY')"/>
         <button class="osc-type1" id="osc-device-posx-type" onclick="oscDeviceType('posX')">Off</button>
         <button class="osc-type2" id="osc-device-posy-type" onclick="oscDeviceType('posY')">Off</button>
         <button class="osc-type3" id="osc-device-posz-type" onclick="oscDeviceType('posZ')">Off</button>
