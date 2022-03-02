@@ -85,6 +85,7 @@ var grabbedWindow = -1;
 var utility = null;
 API.on("device-position", function (event){
     deviceUpdates[event.deviceId] = event.deviceInfo;
+    sendDeviceOSC(event.deviceId, event.deviceInfo);
 });
 API.on("message", function (event){
     let msg = event.message;
@@ -94,6 +95,7 @@ API.on("message", function (event){
 });
 API.on("overlay-changed", async function (event){
     if(startingUp||updatingLoc)return;
+    sendWindowOSC(-1, await new OVRTOverlay(uid).getTransform());
     if(uid===event.uid){
         let fastest = null;
         let fastestDiff = 0;
@@ -284,7 +286,7 @@ API.on("overlay-changed", async function (event){
                 try{
                     let thisQuat = toQuat(transform.rotX, transform.rotY, transform.rotZ);
                     let offset = data.linkedWindows[wid].offset;
-                    let newRot = normQuat(mulQuat(divQuat(thisQuat, offset.orgRot), offset.targRot));
+                    let newRot = normalizeQuat(mulQuat(divQuat(thisQuat, offset.orgRot), offset.targRot));
                     let euler = toEuler(newRot);
                     let ox = offset.posX;
                     let oy = offset.posY;
@@ -302,10 +304,10 @@ API.on("overlay-changed", async function (event){
                     let posX = transform.posX+ox;
                     let posY = transform.posY+oy;
                     let posZ = transform.posZ+oz;
+                    let tf = await data.linkedWindows[wid].overlay.getTransform();
                     if(data.lerping>0||data.microSmooth){
                         let lerping = Math.max(0.1, data.lerping);
                         let amount = 1-(lerping/100);
-                        let tf = await data.linkedWindows[wid].overlay.getTransform();
                         let dx = tf.posX-posX;
                         let dy = tf.posY-posY;
                         let dz = tf.posZ-posZ;
@@ -316,8 +318,8 @@ API.on("overlay-changed", async function (event){
                         posX = lerp(tf.posX, posX, amount);
                         posY = lerp(tf.posY, posY, amount);
                         posZ = lerp(tf.posZ, posZ, amount);
-//                        let q1 = normQuat(toQuat(tf.rotX, tf.rotY, tf.rotZ));
-//                        let q3 = normQuat({
+//                        let q1 = normalizeQuat(toQuat(tf.rotX, tf.rotY, tf.rotZ));
+//                        let q3 = normalizeQuat({
 //                            w: lerp(q1.w, newRot.w, amount),
 //                            x: lerp(q1.x, newRot.x, amount),
 //                            y: lerp(q1.y, newRot.y, amount),
@@ -331,6 +333,18 @@ API.on("overlay-changed", async function (event){
                         euler[1] = lerpe(tf.rotY, euler[1], amount);
                         euler[2] = lerpe(tf.rotZ, euler[2], amount);
                     }
+                    sendWindowOSC(wid, {
+                        posX: posX,
+                        posY: posY,
+                        posZ: posZ,
+                        rotX: euler[0],
+                        rotY: euler[1],
+                        rotZ: euler[2],
+                        size: tf.size,
+                        curvature: tf.curvature,
+                        opacity: tf.opacity
+                        
+                    });
                     data.linkedWindows[wid].overlay.setPosition(posX,posY,posZ);
                     data.linkedWindows[wid].overlay.setRotation(euler[0], euler[1], euler[2]);
                     data.linkedWindows[wid].overlay.getTransform().then(trnsfrm => {
@@ -376,7 +390,7 @@ function toQuat(pitch, yaw, roll){
     let cr = Math.cos(roll*rad*0.5);
     let sr = Math.sin(roll*rad*0.5);
     
-    return normQuat({
+    return normalizeQuat({
         w:cr*cp*cy+sr*sp*sy,
         x:sr*cp*cy-cr*sp*sy,
         y:cr*sp*cy+sr*cp*sy,
@@ -996,6 +1010,61 @@ var oscCurrentWindow = 0;
 var oscCurrentDevice = 1;
 oscUpdateWindow();
 oscUpdateDevice();
+function calcLookAngle(head, window){
+    let qh = toQuat(head.rotX, head.rotY, head.rotZ);
+    let qw = toQuat(window.rotX, window.rotY, window.rotZ);
+    let qd = divQuat(qh, qw);
+    let euler = toEuler(qd);
+    return Math.sqrt(euler[0]*euler[0]+euler[1]*euler[1]);//probably not right, but maybe close?
+}
+function sendDeviceOSC(id, info){
+    let osc = data.deviceOSC[id];
+    if(osc){
+        sendSignedOSC(info.posX/osc.posX.range, osc.posX.text, osc.posX.type);
+        sendSignedOSC(info.posY/osc.posY.range, osc.posY.text, osc.posY.type);
+        sendSignedOSC(info.posZ/osc.posZ.range, osc.posZ.text, osc.posZ.type);
+        sendSignedOSC(boundEuler(info.rotX)/osc.rotX.range, osc.rotX.text, osc.rotX.type);
+        sendSignedOSC(boundEuler(info.rotY)/osc.rotY.range, osc.rotY.text, osc.rotY.type);
+        sendSignedOSC(boundEuler(info.rotZ)/osc.rotZ.range, osc.rotZ.text, osc.rotZ.type);
+        sendSignedOSC(info.trackpadX, osc.trkX.text, osc.trkX.type);
+        sendSignedOSC(info.trackpadY, osc.trkY.text, osc.trkY.type);
+    }
+}
+function sendWindowOSC(id, transform){
+    let osc = data.osc;
+    if(id>-1)osc = data.linkedWindows[id].osc;
+    if(osc){
+        sendSignedOSC(transform.posX/osc.posX.range, osc.posX.text, osc.posX.type);
+        sendSignedOSC(transform.posY/osc.posY.range, osc.posY.text, osc.posY.type);
+        sendSignedOSC(transform.posZ/osc.posZ.range, osc.posZ.text, osc.posZ.type);
+        sendSignedOSC(boundEuler(transform.rotX)/osc.rotX.range, osc.rotX.text, osc.rotX.type);
+        sendSignedOSC(boundEuler(transform.rotY)/osc.rotY.range, osc.rotY.text, osc.rotY.type);
+        sendSignedOSC(boundEuler(transform.rotZ)/osc.rotZ.range, osc.rotZ.text, osc.rotZ.type);
+        sendUnsignedOSC(calcLookAngle(deviceUpdates[1], transform)/osc.angle.range, osc.angle.text, osc.angle.type);
+        sendUnsignedOSC(transform.size/osc.size.range, osc.size.text, osc.size.type);
+        sendUnsignedOSC(transform.curvature, osc.curve.text, osc.curve.type);
+        sendUnsignedOSC(transform.opacity, osc.alpha.text, osc.alpha.type);
+    }
+}
+function boundEuler(ang){
+    while(ang>180)ang-=360;
+    while(ang<-180)ang+=360;
+    return ang;
+}
+function sendSignedOSC(value, name, type){
+    if(type===-1)return;
+    name = data.oscPrefix+name;
+    if(type===0)value = Math.floor((value+1)/2*255);//int
+    if(type===2)value = value>0;
+    API.sendOSCMessage(name, value+"", type);
+}
+function sendUnsignedOSC(value, name, type){
+    if(type===-1)return;
+    name = data.oscPrefix+name;
+    if(type===0)value = Math.floor(value*255);//int
+    if(type===2)value = value>0.5;
+    API.sendOSCMessage(name, value+"", type);
+}
 function oscDefWindow(){
     return {
         posX:{
@@ -1165,7 +1234,7 @@ function oscWindowType(key){
         osc = data.linkedWindows[wid].osc;
     }
     osc[key].type++;
-    if(osc[key].type>=2)osc[key].type = -1;
+    if(osc[key].type>=3)osc[key].type = -1;
     save();
     document.getElementById("osc-window-posx-type").innerHTML = oscTypeS(osc.posX.type);
     document.getElementById("osc-window-posy-type").innerHTML = oscTypeS(osc.posY.type);
@@ -1355,7 +1424,7 @@ function oscDeviceType(key){
     if(!data.deviceOSC[oscCurrentDevice]) data.deviceOSC[oscCurrentDevice] = oscDefDevice();
     let osc = data.deviceOSC[oscCurrentDevice];
     osc[key].type++;
-    if(osc[key].type>=2)osc[key].type = -1;
+    if(osc[key].type>=3)osc[key].type = -1;
     save();
     document.getElementById("osc-device-posx-type").innerHTML = oscTypeS(osc.posX.type);
     document.getElementById("osc-device-posy-type").innerHTML = oscTypeS(osc.posY.type);
@@ -1417,7 +1486,7 @@ function oscDeviceRotRangeDec(key){
  * Copyright (c) 2017 Robert Eisele
  * https://github.com/infusion/Quaternion.js/
  */
-function normQuat(q){
+function normalizeQuat(q){
     let w = q.w;
     let x = q.x;
     let y = q.y;
@@ -1441,6 +1510,13 @@ function normQuat(q){
         y:y*norm,
         z:z*norm
     };
+}
+function normQuat(q){
+    let w = q.w;
+    let x = q.x;
+    let y = q.y;
+    let z = q.z;
+    return Math.sqrt(w * w + x * x + y * y + z * z);
 }
 function invQuat(q){
     let w = q.w;
