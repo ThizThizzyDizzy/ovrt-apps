@@ -1332,7 +1332,7 @@ function oscWindowAngleRangeInc(){
         osc = data.linkedWindows[wid].osc;
     }
     if(osc.angle.range>=180)return;
-    osc.angle.range+=15;
+    osc.angle.range+=5;
     save();
     document.getElementById("osc-window-angle-range").innerHTML = "0-"+osc.angle.range;
 }
@@ -1345,8 +1345,8 @@ function oscWindowAngleRangeDec(){
         if(!data.linkedWindows[wid].osc)data.linkedWindows[wid].osc = oscDefWindow();
         osc = data.linkedWindows[wid].osc;
     }
-    if(osc.angle.range<=15)return;
-    osc.angle.range-=15;
+    if(osc.angle.range<=5)return;
+    osc.angle.range-=5;
     save();
     document.getElementById("osc-window-angle-range").innerHTML = "0-"+osc.angle.range;
 }
