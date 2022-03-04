@@ -3,9 +3,31 @@ const API = new OVRT({
 });
 var currentWindow = null;
 status();
+var depth = 0;
 function status(){
     let total = localStorage.getItem("lastID");
+    depth = 0;
     document.getElementById("status").innerHTML = (total?"Total anchors spawned: "+(++total):"");
+    document.getElementById("patreon").hidden = !(isprime(total)&&ishappy(total));
+}
+function ishappy(n){
+    if(n===1)return true;
+    depth++;
+    if(depth>1000)return false;//not gonna bother with that
+    let s = n+"";
+    let sum = 0;
+    for(let i = 0; i < s.length; i++){
+        let d = parseInt(s[i]);
+        sum+=d*d;
+    }
+    return ishappy(sum);
+}
+function isprime(n){
+    if(n<2)return false;
+    for(let i = 2; i<n; i++){
+        if(n%i==0)return false;
+    }
+    return true;
 }
 API.on("device-position", function(id, pos){
     if(id===1&&currentWindow!==null){
