@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <label class="title">Markers</label>
+        <div id="center">
+            <button class="b11" onmousedown="center('filled_diamond_large')"><img class="tint-center" src="images/center/filled_diamond_large.png"></button>
+            <button class="b12" onmousedown="center('filled_diamond')"><img class="tint-center" src="images/center/filled_diamond.png"></button>
+            <button class="b13" onmousedown="center('filled_diamond_small')"><img class="tint-center" src="images/center/filled_diamond_small.png"></button>
+            <button class="b14" onmousedown="center('diamond_large')"><img class="tint-center" src="images/center/diamond_large.png"></button>
+            <button class="b15" onmousedown="center('diamond')"><img class="tint-center" src="images/center/diamond.png"></button>
+            <button class="b16" onmousedown="center('diamond_small')"><img class="tint-center" src="images/center/diamond_small.png"></button>
+            <button class="b21" onmousedown="center('block_large')"><img class="tint-center" src="images/center/block_large.png"></button>
+            <button class="b22" onmousedown="center('block')"><img class="tint-center" src="images/center/block.png"></button>
+            <button class="b23" onmousedown="center('block_small')"><img class="tint-center" src="images/center/block_small.png"></button>
+            <button class="b24" onmousedown="center('square_large')"><img class="tint-center" src="images/center/square_large.png"></button>
+            <button class="b25" onmousedown="center('square')"><img class="tint-center" src="images/center/square.png"></button>
+            <button class="b26" onmousedown="center('square_small')"><img class="tint-center" src="images/center/square_small.png"></button>
+            <button class="b31" onmousedown="center('dot_large')"><img class="tint-center" src="images/center/dot_large.png"></button>
+            <button class="b32" onmousedown="center('dot')"><img class="tint-center" src="images/center/dot.png"></button>
+            <button class="b33" onmousedown="center('dot_small')"><img class="tint-center" src="images/center/dot_small.png"></button>
+            <button class="b34" onmousedown="center('circle_large')"><img class="tint-center" src="images/center/circle_large.png"></button>
+            <button class="b35" onmousedown="center('circle')"><img class="tint-center" src="images/center/circle.png"></button>
+            <button class="b36" onmousedown="center('circle_small')"><img class="tint-center" src="images/center/circle_small.png"></button>
+            <button class="b41" onmousedown="center('circle_broken_large')"><img class="tint-center" src="images/center/circle_broken_large.png"></button>
+            <button class="b42" onmousedown="center('circle_broken')"><img class="tint-center" src="images/center/circle_broken.png"></button>
+            <button class="b43" onmousedown="center('circle_broken_small')"><img class="tint-center" src="images/center/circle_broken_small.png"></button>
+            <button class="b44" onmousedown="center('square_broken_large')"><img class="tint-center" src="images/center/square_broken_large.png"></button>
+            <button class="b45" onmousedown="center('square_broken')"><img class="tint-center" src="images/center/square_broken.png"></button>
+            <button class="b46" onmousedown="center('square_broken_small')"><img class="tint-center" src="images/center/square_broken_small.png"></button>
+            <button class="b51" onmousedown="center('circle_corners_large')"><img class="tint-center" src="images/center/circle_corners_large.png"></button>
+            <button class="b52" onmousedown="center('circle_corners')"><img class="tint-center" src="images/center/circle_corners.png"></button>
+            <button class="b53" onmousedown="center('circle_corners_small')"><img class="tint-center" src="images/center/circle_corners_small.png"></button>
+            <button class="b54" onmousedown="center('square_corners_large')"><img class="tint-center" src="images/center/square_corners_large.png"></button>
+            <button class="b55" onmousedown="center('square_corners')"><img class="tint-center" src="images/center/square_corners.png"></button>
+            <button class="b56" onmousedown="center('square_corners_small')"><img class="tint-center" src="images/center/square_corners_small.png"></button>
+            <button class="b61" onmousedown="center('circle_rotated_broken_large')"><img class="tint-center" src="images/center/circle_rotated_broken_large.png"></button>
+            <button class="b62" onmousedown="center('circle_rotated_broken')"><img class="tint-center" src="images/center/circle_rotated_broken.png"></button>
+            <button class="b63" onmousedown="center('circle_rotated_broken_small')"><img class="tint-center" src="images/center/circle_rotated_broken_small.png"></button>
+            <button class="b64" onmousedown="center('diamond_broken_large')"><img class="tint-center" src="images/center/diamond_broken_large.png"></button>
+            <button class="b65" onmousedown="center('diamond_broken')"><img class="tint-center" src="images/center/diamond_broken.png"></button>
+            <button class="b66" onmousedown="center('diamond_broken_small')"><img class="tint-center" src="images/center/diamond_broken_small.png"></button>
+            <button class="b71" onmousedown="center('circle_rotated_corners_large')"><img class="tint-center" src="images/center/circle_rotated_corners_large.png"></button>
+            <button class="b72" onmousedown="center('circle_rotated_corners')"><img class="tint-center" src="images/center/circle_rotated_corners.png"></button>
+            <button class="b73" onmousedown="center('circle_rotated_corners_small')"><img class="tint-center" src="images/center/circle_rotated_corners_small.png"></button>
+            <button class="b74" onmousedown="center('diamond_corners_large')"><img class="tint-center" src="images/center/diamond_corners_large.png"></button>
+            <button class="b75" onmousedown="center('diamond_corners')"><img class="tint-center" src="images/center/diamond_corners.png"></button>
+            <button class="b76" onmousedown="center('diamond_corners_small')"><img class="tint-center" src="images/center/diamond_corners_small.png"></button>
+        </div>
+        <div id="inner" hidden>
+            <button class="b11" onmousedown="inner('crosshair_thick_full')"><img class="tint-inner" src="images/inner/crosshair_thick_full.png"></button>
+            <button class="b12" onmousedown="inner('crosshair_full')"><img class="tint-inner" src="images/inner/crosshair_full.png"></button>
+            <button class="b13" onmousedown="inner('crosshair_thin_full')"><img class="tint-inner" src="images/inner/crosshair_thin_full.png"></button>
+            <button class="b14" onmousedown="inner('crosshair_diagonal_thick_full')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thick_full.png"></button>
+            <button class="b15" onmousedown="inner('crosshair_diagonal_full')"><img class="tint-inner" src="images/inner/crosshair_diagonal_full.png"></button>
+            <button class="b16" onmousedown="inner('crosshair_diagonal_thin_full')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thin_full.png"></button>
+            <button class="b21" onmousedown="inner('crosshair_thick_major')"><img class="tint-inner" src="images/inner/crosshair_thick_major.png"></button>
+            <button class="b22" onmousedown="inner('crosshair_major')"><img class="tint-inner" src="images/inner/crosshair_major.png"></button>
+            <button class="b23" onmousedown="inner('crosshair_thin_major')"><img class="tint-inner" src="images/inner/crosshair_thin_major.png"></button>
+            <button class="b24" onmousedown="inner('crosshair_diagonal_thick_major')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thick_major.png"></button>
+            <button class="b25" onmousedown="inner('crosshair_diagonal_major')"><img class="tint-inner" src="images/inner/crosshair_diagonal_major.png"></button>
+            <button class="b26" onmousedown="inner('crosshair_diagonal_thin_major')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thin_major.png"></button>
+            <button class="b31" onmousedown="inner('crosshair_thick_large')"><img class="tint-inner" src="images/inner/crosshair_thick_large.png"></button>
+            <button class="b32" onmousedown="inner('crosshair_large')"><img class="tint-inner" src="images/inner/crosshair_large.png"></button>
+            <button class="b33" onmousedown="inner('crosshair_thin_large')"><img class="tint-inner" src="images/inner/crosshair_thin_large.png"></button>
+            <button class="b34" onmousedown="inner('crosshair_diagonal_thick_large')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thick_large.png"></button>
+            <button class="b35" onmousedown="inner('crosshair_diagonal_large')"><img class="tint-inner" src="images/inner/crosshair_diagonal_large.png"></button>
+            <button class="b36" onmousedown="inner('crosshair_diagonal_thin_large')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thin_large.png"></button>
+            <button class="b41" onmousedown="inner('crosshair_thick')"><img class="tint-inner" src="images/inner/crosshair_thick.png"></button>
+            <button class="b42" onmousedown="inner('crosshair')"><img class="tint-inner" src="images/inner/crosshair.png"></button>
+            <button class="b43" onmousedown="inner('crosshair_thin')"><img class="tint-inner" src="images/inner/crosshair_thin.png"></button>
+            <button class="b44" onmousedown="inner('crosshair_diagonal_thick')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thick.png"></button>
+            <button class="b45" onmousedown="inner('crosshair_diagonal')"><img class="tint-inner" src="images/inner/crosshair_diagonal.png"></button>
+            <button class="b46" onmousedown="inner('crosshair_diagonal_thin')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thin.png"></button>
+            <button class="b51" onmousedown="inner('crosshair_thick_small')"><img class="tint-inner" src="images/inner/crosshair_thick_small.png"></button>
+            <button class="b52" onmousedown="inner('crosshair_small')"><img class="tint-inner" src="images/inner/crosshair_small.png"></button>
+            <button class="b53" onmousedown="inner('crosshair_thin_small')"><img class="tint-inner" src="images/inner/crosshair_thin_small.png"></button>
+            <button class="b54" onmousedown="inner('crosshair_diagonal_thick_small')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thick_small.png"></button>
+            <button class="b55" onmousedown="inner('crosshair_diagonal_small')"><img class="tint-inner" src="images/inner/crosshair_diagonal_small.png"></button>
+            <button class="b56" onmousedown="inner('crosshair_diagonal_thin_small')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thin_small.png"></button>
+            <button class="b61" onmousedown="inner('crosshair_thick_minor')"><img class="tint-inner" src="images/inner/crosshair_thick_minor.png"></button>
+            <button class="b62" onmousedown="inner('crosshair_minor')"><img class="tint-inner" src="images/inner/crosshair_minor.png"></button>
+            <button class="b63" onmousedown="inner('crosshair_thin_minor')"><img class="tint-inner" src="images/inner/crosshair_thin_minor.png"></button>
+            <button class="b64" onmousedown="inner('crosshair_diagonal_thick_minor')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thick_minor.png"></button>
+            <button class="b65" onmousedown="inner('crosshair_diagonal_minor')"><img class="tint-inner" src="images/inner/crosshair_diagonal_minor.png"></button>
+            <button class="b66" onmousedown="inner('crosshair_diagonal_thin_minor')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thin_minor.png"></button>
+            <button class="b71" onmousedown="inner('crosshair_thick_tiny')"><img class="tint-inner" src="images/inner/crosshair_thick_tiny.png"></button>
+            <button class="b72" onmousedown="inner('crosshair_tiny')"><img class="tint-inner" src="images/inner/crosshair_tiny.png"></button>
+            <button class="b73" onmousedown="inner('crosshair_thin_tiny')"><img class="tint-inner" src="images/inner/crosshair_thin_tiny.png"></button>
+            <button class="b74" onmousedown="inner('crosshair_diagonal_thick_tiny')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thick_tiny.png"></button>
+            <button class="b75" onmousedown="inner('crosshair_diagonal_tiny')"><img class="tint-inner" src="images/inner/crosshair_diagonal_tiny.png"></button>
+            <button class="b76" onmousedown="inner('crosshair_diagonal_thin_tiny')"><img class="tint-inner" src="images/inner/crosshair_diagonal_thin_tiny.png"></button>
+        </div>
+        <div id="outer" hidden>
+            <button class="b11" onmousedown="outer('square_thick')"><img class="tint-outer" src="images/outer/square_thick.png"></button>
+            <button class="b12" onmousedown="outer('square')"><img class="tint-outer" src="images/outer/square.png"></button>
+            <button class="b13" onmousedown="outer('square_thin')"><img class="tint-outer" src="images/outer/square_thin.png"></button>
+            <button class="b14" onmousedown="outer('circle_thick')"><img class="tint-outer" src="images/outer/circle_thick.png"></button>
+            <button class="b15" onmousedown="outer('circle')"><img class="tint-outer" src="images/outer/circle.png"></button>
+            <button class="b16" onmousedown="outer('circle_thin')"><img class="tint-outer" src="images/outer/circle_thin.png"></button>
+            <button class="b21" onmousedown="outer('square_broken_thick')"><img class="tint-outer" src="images/outer/square_broken_thick.png"></button>
+            <button class="b22" onmousedown="outer('square_broken')"><img class="tint-outer" src="images/outer/square_broken.png"></button>
+            <button class="b23" onmousedown="outer('square_broken_thin')"><img class="tint-outer" src="images/outer/square_broken_thin.png"></button>
+            <button class="b24" onmousedown="outer('circle_broken_thick')"><img class="tint-outer" src="images/outer/circle_broken_thick.png"></button>
+            <button class="b25" onmousedown="outer('circle_broken')"><img class="tint-outer" src="images/outer/circle_broken.png"></button>
+            <button class="b26" onmousedown="outer('circle_broken_thin')"><img class="tint-outer" src="images/outer/circle_broken_thin.png"></button>
+            <button class="b31" onmousedown="outer('square_split_thick')"><img class="tint-outer" src="images/outer/square_split_thick.png"></button>
+            <button class="b32" onmousedown="outer('square_split')"><img class="tint-outer" src="images/outer/square_split.png"></button>
+            <button class="b33" onmousedown="outer('square_split_thin')"><img class="tint-outer" src="images/outer/square_split_thin.png"></button>
+            <button class="b34" onmousedown="outer('circle_split_thick')"><img class="tint-outer" src="images/outer/circle_split_thick.png"></button>
+            <button class="b35" onmousedown="outer('circle_split')"><img class="tint-outer" src="images/outer/circle_split.png"></button>
+            <button class="b36" onmousedown="outer('circle_split_thin')"><img class="tint-outer" src="images/outer/circle_split_thin.png"></button>
+            <button class="b41" onmousedown="outer('square_corners_thick')"><img class="tint-outer" src="images/outer/square_corners_thick.png"></button>
+            <button class="b42" onmousedown="outer('square_corners')"><img class="tint-outer" src="images/outer/square_corners.png"></button>
+            <button class="b43" onmousedown="outer('square_corners_thin')"><img class="tint-outer" src="images/outer/square_corners_thin.png"></button>
+            <button class="b44" onmousedown="outer('circle_corners_thick')"><img class="tint-outer" src="images/outer/circle_corners_thick.png"></button>
+            <button class="b45" onmousedown="outer('circle_corners')"><img class="tint-outer" src="images/outer/circle_corners.png"></button>
+            <button class="b46" onmousedown="outer('circle_corners_thin')"><img class="tint-outer" src="images/outer/circle_corners_thin.png"></button>
+            <button class="b51" onmousedown="outer('square_tips_thick')"><img class="tint-outer" src="images/outer/square_tips_thick.png"></button>
+            <button class="b52" onmousedown="outer('square_tips')"><img class="tint-outer" src="images/outer/square_tips.png"></button>
+            <button class="b53" onmousedown="outer('square_tips_thin')"><img class="tint-outer" src="images/outer/square_tips_thin.png"></button>
+            <button class="b54" onmousedown="outer('circle_tips_thick')"><img class="tint-outer" src="images/outer/circle_tips_thick.png"></button>
+            <button class="b55" onmousedown="outer('circle_tips')"><img class="tint-outer" src="images/outer/circle_tips.png"></button>
+            <button class="b56" onmousedown="outer('circle_tips_thin')"><img class="tint-outer" src="images/outer/circle_tips_thin.png"></button>
+            <button class="b61" onmousedown="outer('circle_rotated_broken_thick')"><img class="tint-outer" src="images/outer/circle_rotated_broken_thick.png"></button>
+            <button class="b62" onmousedown="outer('circle_rotated_broken')"><img class="tint-outer" src="images/outer/circle_rotated_broken.png"></button>
+            <button class="b63" onmousedown="outer('circle_rotated_broken_thin')"><img class="tint-outer" src="images/outer/circle_rotated_broken_thin.png"></button>
+            <button class="b64" onmousedown="outer('circle_rotated_split_thick')"><img class="tint-outer" src="images/outer/circle_rotated_split_thick.png"></button>
+            <button class="b65" onmousedown="outer('circle_rotated_split')"><img class="tint-outer" src="images/outer/circle_rotated_split.png"></button>
+            <button class="b66" onmousedown="outer('circle_rotated_split_thin')"><img class="tint-outer" src="images/outer/circle_rotated_split_thin.png"></button>
+            <button class="b71" onmousedown="outer('circle_rotated_corners_thick')"><img class="tint-outer" src="images/outer/circle_rotated_corners_thick.png"></button>
+            <button class="b72" onmousedown="outer('circle_rotated_corners')"><img class="tint-outer" src="images/outer/circle_rotated_corners.png"></button>
+            <button class="b73" onmousedown="outer('circle_rotated_corners_thin')"><img class="tint-outer" src="images/outer/circle_rotated_corners_thin.png"></button>
+            <button class="b74" onmousedown="outer('circle_rotated_tips_thick')"><img class="tint-outer" src="images/outer/circle_rotated_tips_thick.png"></button>
+            <button class="b75" onmousedown="outer('circle_rotated_tips')"><img class="tint-outer" src="images/outer/circle_rotated_tips.png"></button>
+            <button class="b76" onmousedown="outer('circle_rotated_tips_thin')"><img class="tint-outer" src="images/outer/circle_rotated_tips_thin.png"></button>
+        </div>
+        <div id="settings" hidden>
+            <label class="lbl-center">Center</label>
+            <label class="lbl-cen-hue">Hue</label>
+            <input type="range" min="0" max="360" value="0" class="center-hue" oninput="centerHue(this.value)">
+            <label class="lbl-cen-sat">Saturation</label>
+            <input type="range" min="0" max="100" value="100" class="center-sat" oninput="centerSat(this.value)">
+            <label class="lbl-cen-val">Brightness</label>
+            <input type="range" min="0" max="135" value="100" class="center-val" oninput="centerVal(this.value)">
+            <label class="lbl-inner">Inner</label>
+            <label class="lbl-inn-hue">Hue</label>
+            <input type="range" min="0" max="360" value="0" class="inner-hue" oninput="innerHue(this.value)">
+            <label class="lbl-inn-sat">Saturation</label>
+            <input type="range" min="0" max="100" value="100" class="inner-sat" oninput="innerSat(this.value)">
+            <label class="lbl-inn-val">Brightness</label>
+            <input type="range" min="0" max="135" value="100" class="inner-val" oninput="innerVal(this.value)">
+            <label class="lbl-outer">Outer</label>
+            <label class="lbl-out-hue">Hue</label>
+            <input type="range" min="0" max="360" value="0" class="outer-hue" oninput="outerHue(this.value)">
+            <label class="lbl-out-sat">Saturation</label>
+            <input type="range" min="0" max="100" value="100" class="outer-sat" oninput="outerSat(this.value)">
+            <label class="lbl-out-val">Brightness</label>
+            <input type="range" min="0" max="135" value="100" class="outer-val" oninput="outerVal(this.value)">
+            <label class="lbl-center-marker">Center Marker (Beacon)</label>
+            <label class="lbl-beacon-red">Red</label>
+            <input type="range" min="0" max="255" value="0" class="beacon-red" oninput="beaconRed(this.value)">
+            <label class="lbl-beacon-green">Green</label>
+            <input type="range" min="0" max="255" value="255" class="beacon-green" oninput="beaconGreen(this.value)">
+            <label class="lbl-beacon-blue">Blue</label>
+            <input type="range" min="0" max="255" value="255" class="beacon-blue" oninput="beaconBlue(this.value)">
+            <button class="spawn-beacon" onmousedown="spawnBeacon()">Spawn Beacon</button>
+            <button class="spawn-floor" onmousedown="spawnFloor()">Spawn Center Floor Marker</button>
+        </div>
+        <button class="btn-center" id="btn-center" onmousedown="switchMenu('center')">Clear</button>
+        <button class="btn-inner" id="btn-inner" onmousedown="switchMenu('inner')">Inner</button>
+        <button class="btn-outer" id="btn-outer" onmousedown="switchMenu('outer')">Outer</button>
+        <button class="btn-settings" onmousedown="switchMenu('settings')">Settings</button>
+        <button class="btn-spawn" onmousedown="spawnMarker()">Spawn</button>
+        <label class="preview" id="preview"></label>
+        <script src="js/helper.js"></script>
+        <script src="js/main.js"></script>
+        <script>refresh()</script>
+    </body>
+</html>

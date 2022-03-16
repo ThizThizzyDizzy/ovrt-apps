@@ -1,0 +1,24 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+.center{
+    position: fixed;
+    left: 46px;
+    top: 46px;
+    width: 36px;
+    height: 36px;
+}
+.inner{
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 128px;
+    height: 128px;
+}
+.outer{
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 128px;
+    height: 128px;
+}
