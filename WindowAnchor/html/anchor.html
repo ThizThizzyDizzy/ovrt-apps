@@ -22,7 +22,7 @@
       <label class="alpha">Opacity</label>
       <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease window opacity by 5%')" class="alpha-less" onclick="lessOpacity()">−</button>
       <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase window opacity by 5%')" class="alpha-more" onclick="moreOpacity()">+</button>
-      <button onmouseout="resetTooltip()" onmouseover="tooltip('Lock Pitch/Roll rotation')" class="toggle-flat" id="toggle-flat" onclick="toggleFlat()">Lock Rotation</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Lock Pitch/Roll rotation (For curved windows)')" class="toggle-flat" id="toggle-flat" onclick="toggleFlat()">Lock Rotation</button>
       <button onmouseout="resetTooltip()" onmouseover="tooltip('Lock movement')" class="toggle-lock" id="toggle-lock" onclick="toggleLock()">Lock</button>
       <button onmouseout="resetTooltip()" onmouseover="tooltip(moveAny?'Limit movement to anchor only':'Allow movement by any window (Unstable)')" class="toggle-move" id="toggle-move" onclick="toggleMove()">Grab Anchor<br>to Move</button>
       <button onmouseout="resetTooltip()" onmouseover="tooltip('Advanced Settings Menu')" class="settings" onclick="switchMenu('div-main', 'div-settings')">Advanced Settings</button>
@@ -41,6 +41,13 @@
       <label class="lerped-header">Window Smoothing</label>
       <label class="lerped" id="lerp-smoothing">Loading</label>
       <button onmouseout="resetTooltip()" onmouseover="tooltip('Smooths only small movements')" class="adv-smooth" id="advanced-smoothing" onclick="microSmooth()">Stabilization OFF</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock scaling of anchor')" class="lock-scale" id="lock-scale" onclick="lockScale()">Lock Scale</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor movement along X axis')" class="lock-x" id="lock-x" onclick="lockX()">Lock X Movement</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor movement along Y axis')" class="lock-y" id="lock-y" onclick="lockY()">Lock Y Movement</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor movement along Z axis')" class="lock-z" id="lock-z" onclick="lockZ()">Lock Z Movement</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor pitch rotation')" class="lock-rx" id="lock-rx" onclick="lockRX()">Lock Pitch</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor yaw rotation')" class="lock-ry" id="lock-ry" onclick="lockRY()">Lock Yaw</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor roll rotation')" class="lock-rz" id="lock-rz" onclick="lockRZ()">Lock Roll</button>
     </div>
     <div id="div-osc" hidden>
       <button onmouseout="resetTooltip()" onmouseover="tooltip('Back to Advanced Settings')" class="osc-settings" onclick="switchMenu('div-osc', 'div-settings')">Back</button>

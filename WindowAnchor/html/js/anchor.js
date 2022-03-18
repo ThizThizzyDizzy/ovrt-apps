@@ -43,7 +43,13 @@ updateLerp();
 updateMicroSmooth();
 var anchorEnabled = true;
 var snapEnabled = false;
-var lockRot = false;
+var lS = false;
+var lX = false;
+var lY = false;
+var lZ = false;
+var lRX = false;
+var lRY = false;
+var lRZ = false;
 var lockPos = false;
 var moveAny = false;
 var lockedRot = data.lockedRot;
@@ -61,10 +67,22 @@ API.getUniqueID().then(async function(id){
     if(data.snapEnabled)toggleSnap();
     let o = new OVRTOverlay(uid);
     selfTransform = await o.getTransform();
-    if(data.lockRot){
-        o.setRotation(lockedRot.rotX,selfTransform.rotY,lockedRot.rotZ);
-        toggleFlat();
+    if(data.lX||data.lY||data.lZ){
+        o.setPosition(data.lockX?lockedRot.posX:selfTransform.posX,data.lY?lockedRot.PosY:selfTransform.posY,data.lZ?lockedRot.posZ:selfTransform.posZ);
     }
+    if(data.lockRot||data.lRX||data.lRY||data.lRZ){
+        o.setRotation(data.lockRot||data.lRX?lockedRot.rotX:selfTransform.rotX,data.lRY?lockedRot.rotY:selfTransform.rotY,data.lockRot||data.lRZ?lockedRot.rotZ:selfTransform.rotZ);
+    }
+    if(data.lS){
+        o.setSize(data.lS?lockedRot.size:selfTransform.size);
+    }
+    if(data.lX)lockX();
+    if(data.lY)lockY();
+    if(data.lZ)lockZ();
+    if(data.lRX||data.lockRot)lockRX();
+    if(data.lRY)lockRY();
+    if(data.lRZ||data.lockRot)lockRZ();
+    if(data.lS)lockScale();
     if(data.lockPos)toggleLock();
     if(data.moveAny)toggleMove();
     for(const wid in data.linkedWindows){
@@ -78,7 +96,6 @@ API.getUniqueID().then(async function(id){
     status("Ready");
     startingUp = false;
 });
-var anchorWasMoving = false;
 var updatingLoc = false;
 var deviceUpdates = {};
 var grabbedWindow = -1;
@@ -110,7 +127,7 @@ API.on("overlay-changed", async function (event){
             let dry = tf.rotY-transform.rotY;
             let drz = tf.rotZ-transform.rotZ;
             let dr = Math.abs(drx)+Math.abs(dry)+Math.abs(drz);
-            let dist = Math.sqrt(dx*dx+dy*dy+dz*dz);
+            let dist = Math.sqrt(dx*dx+dy*dy+dz*dz)+Math.abs(tf.size-transform.size);
             if(dist>.00001){//||dr>1){
                 numFast++;
                 if(dist>fastestDiff||fastest===null){
@@ -126,9 +143,19 @@ API.on("overlay-changed", async function (event){
         let sdrx = event.transform.rotX-selfTransform.rotX;
         let sdry = event.transform.rotY-selfTransform.rotY;
         let sdrz = event.transform.rotZ-selfTransform.rotZ;
-        selfTransform = event.transform;
         let sdr = Math.abs(sdrx)+Math.abs(sdry)+Math.abs(sdrz);
-        let selfDist = Math.sqrt(sdx*sdx+sdy*sdy+sdz*sdz);
+        let selfDist = Math.sqrt(sdx*sdx+sdy*sdy+sdz*sdz)+Math.abs(event.transform.size-selfTransform.size);
+        selfTransform = {
+            posX: event.transform.posX,
+            posY: event.transform.posY,
+            posZ: event.transform.posZ,
+            rotX: event.transform.rotX,
+            rotY: event.transform.rotY,
+            rotZ: event.transform.rotZ,
+            size: event.transform.size,
+            curvature: event.transform.curvature,
+            opacity: event.transform.opacity
+        };
         let anchorMoving = selfDist>.00001;//||sdr>1;
 //        if(numFast===0&&!anchorMoving&&!refreshNeeded)return;//nothing's moved; do nothing CAUSES A BUNCH OF ISSUES
         if(snapEnabled){
@@ -246,6 +273,11 @@ API.on("overlay-changed", async function (event){
                 let ox = -offset.posX;
                 let oy = -offset.posY;
                 let oz = -offset.posZ;
+                if(offset.orgSize){
+                    ox*=transform.size/offset.orgSize;
+                    oy*=transform.size/offset.orgSize;
+                    oz*=transform.size/offset.orgSize;
+                }
                 let posRot = toEuler(divQuat(offset.targRot, thisQuat));
                 let xz = rotatePoint(ox, oz, -posRot[1], 0, 0);
                 ox = xz[0];
@@ -259,6 +291,8 @@ API.on("overlay-changed", async function (event){
                 let posX = fasttf.posX+ox;
                 let posY = fasttf.posY+oy;
                 let posZ = fasttf.posZ+oz;
+                let size = fasttf.size;
+                if(offset.size)size /= offset.size;
                 transform.posX = posX;
                 transform.posY = posY;
                 transform.posZ = posZ;
@@ -268,18 +302,58 @@ API.on("overlay-changed", async function (event){
                 updatingLoc = true;
                 thees.setPosition(posX,posY,posZ);
                 thees.setRotation(euler[0], euler[1], euler[2]);
+                if(offset.size)thees.setSize(size);
                 updatingLoc = false;
                 return;
             }
-            if(lockRot){
-                transform.rotX = lockedRot.rotX;
-                transform.rotZ = lockedRot.rotZ;
-                if(anchorWasMoving===true&&anchorMoving===false){
+            if(lX||lY||lZ){
+                let d = 0;
+                if(lX){
+                    d += Math.abs(transform.posX-lockedRot.posX);
+                    transform.posX = lockedRot.posX;
+                }
+                if(lY){
+                    d += Math.abs(transform.posY-lockedRot.posY);
+                    transform.posY = lockedRot.posY;
+                }
+                if(lZ){
+                    d += Math.abs(transform.posZ-lockedRot.posZ);
+                    transform.posZ = lockedRot.posZ;
+                }
+                if(d>0&&anchorMoving===false){
+                    updatingLoc = true;
+                    await new OVRTOverlay(uid).setPosition(transform.posX, transform.posY, transform.posZ);
+                    updatingLoc = false;
+                }
+            }
+            if(lRX||lRY||lRZ){
+                let d = 0;
+                if(lRX){
+                    d+=Math.abs(transform.rotX-lockedRot.rotX);
+                    transform.rotX = lockedRot.rotX;
+                }
+                if(lRY){
+                    d+=Math.abs(transform.rotY-lockedRot.rotY);
+                    transform.rotY = lockedRot.rotY;
+                }
+                if(lRZ){
+                    d+=Math.abs(transform.rotZ-lockedRot.rotZ);
+                    transform.rotZ = lockedRot.rotZ;
+                }
+                if(d>0&&anchorMoving===false){
                     updatingLoc = true;
                     await new OVRTOverlay(uid).setRotation(transform.rotX, transform.rotY, transform.rotZ);
                     updatingLoc = false;
                 }
-                anchorWasMoving = anchorMoving;
+            }
+            if(lS){
+                let d = Math.abs(transform.size-lockedRot.size);
+                transform.size = lockedRot.size;
+                if(d>0&&anchorMoving===false){
+                    updatingLoc = true;
+                    await new OVRTOverlay(uid).setSize(transform.size);
+                    updatingLoc = false;
+                }
             }
             for(const wid in data.linkedWindows){
                 if(moveAny&&grabbedWindow===wid)continue;
@@ -291,6 +365,11 @@ API.on("overlay-changed", async function (event){
                     let ox = offset.posX;
                     let oy = offset.posY;
                     let oz = offset.posZ;
+                    if(offset.orgSize){
+                        ox*=transform.size/offset.orgSize;
+                        oy*=transform.size/offset.orgSize;
+                        oz*=transform.size/offset.orgSize;
+                    }
                     let posRot = toEuler(divQuat(offset.orgRot, thisQuat));
                     let xz = rotatePoint(ox, oz, -posRot[1], 0, 0);
                     ox = xz[0];
@@ -305,6 +384,8 @@ API.on("overlay-changed", async function (event){
                     let posY = transform.posY+oy;
                     let posZ = transform.posZ+oz;
                     let tf = await data.linkedWindows[wid].overlay.getTransform();
+                    let size = transform.size;
+                    if(offset.size)size *= offset.size;
                     if(data.lerping>0||data.microSmooth){
                         let lerping = Math.max(0.1, data.lerping);
                         let amount = 1-(lerping/100);
@@ -318,6 +399,7 @@ API.on("overlay-changed", async function (event){
                         posX = lerp(tf.posX, posX, amount);
                         posY = lerp(tf.posY, posY, amount);
                         posZ = lerp(tf.posZ, posZ, amount);
+                        size = lerp(tf.size, size, amount);
 //                        let q1 = normalizeQuat(toQuat(tf.rotX, tf.rotY, tf.rotZ));
 //                        let q3 = normalizeQuat({
 //                            w: lerp(q1.w, newRot.w, amount),
@@ -347,6 +429,7 @@ API.on("overlay-changed", async function (event){
                     });
                     data.linkedWindows[wid].overlay.setPosition(posX,posY,posZ);
                     data.linkedWindows[wid].overlay.setRotation(euler[0], euler[1], euler[2]);
+                    if(offset.size)data.linkedWindows[wid].overlay.setSize(size);
                     data.linkedWindows[wid].overlay.getTransform().then(trnsfrm => {
                         if(data.linkedWindows[wid])data.linkedWindows[wid].transform = trnsfrm;
                         save();
@@ -435,7 +518,9 @@ async function attach(){
             posY:window.transform.posY-tf.posY,
             posZ:window.transform.posZ-tf.posZ,
             orgRot: origin,
-            targRot: target
+            targRot: target,
+            size:window.transform.size/tf.size,
+            orgSize:tf.size
         };
         window.overlay.setRecenter(false);
         data.linkedWindows[closest] = window;
@@ -567,7 +652,13 @@ function save(){
     if(startingUp)return;
     data.anchorEnabled = anchorEnabled;
     data.snapEnabled = snapEnabled;
-    data.lockRot = lockRot;
+    data.lX = lX;
+    data.lY = lY;
+    data.lZ = lZ;
+    data.lRX = lRX;
+    data.lRY = lRY;
+    data.lRZ = lRZ;
+    data.lS = lS;
     data.lockPos = lockPos;
     data.moveAny = moveAny;
     data.lockedRot = lockedRot;
@@ -628,19 +719,19 @@ async function straightenWindows(){
 async function flattenWindows(){
     let we = anchorEnabled;
     if(we)toggleAnchor();
-    let orly = new OVRTOverlay(uid);
-    let tf = await orly.getTransform();
-    orly.setRotation(0,tf.rotY,0);
-    for(const id in data.linkedWindows){
-        let tf = data.linkedWindows[id].transform;
-        data.linkedWindows[id].overlay.setRotation(0,tf.rotY,0);
-    }
-    if(we)toggleAnchor();
-    status("Flattened "+numWindowsS());
+    setTimeout(async function(){
+        let orly = new OVRTOverlay(uid);
+        let tf = await orly.getTransform();
+        orly.setRotation(0,tf.rotY,0);
+        for(const id in data.linkedWindows){
+            let tf = data.linkedWindows[id].transform;
+            data.linkedWindows[id].overlay.setRotation(0,tf.rotY,0);
+        }
+        if(we)toggleAnchor();
+        status("Flattened "+numWindowsS());
+    }, 1);
 }
 async function arrangeWindows(flip){
-    let lr = lockRot;
-    if(lr)toggleFlat();
     if(!anchorEnabled)toggleAnchor();
     toggleAnchor();
     let overlays = [new OVRTOverlay(uid)];
@@ -694,13 +785,22 @@ async function arrangeWindows(flip){
         overlay.setRotation(tf.rotX, tf.rotY+rot+rot2, tf.rotZ);
     }
     let tf = await overlays[Math.floor(overlays.length/2)].getTransform();
+    if(overlays.length%2===1){
+        let tf2 = await overlays[Math.floor(overlays.length/2)+1].getTransform();
+        tf.posX += (tf2.posX-tf.posX)/2;
+        tf.posY += (tf2.posY-tf.posY)/2;
+        tf.posZ += (tf2.posZ-tf.posZ)/2;
+        tf.rotX += (tf2.rotX-tf.rotX)/2;
+        tf.rotY += (tf2.rotY-tf.rotY)/2;
+        tf.rotZ += (tf2.rotZ-tf.rotZ)/2;
+    }
     overlays[0].setPosition(tf.posX, tf.posY, tf.posZ);
     overlays[0].setRotation(tf.rotX, tf.rotY, tf.rotZ);
     overlays[0].translateUp(-maxSize/2-origin.size/2);
     toggleAnchor();
     overlays[0].setPosition(origin.posX, origin.posY, origin.posZ);
     overlays[0].setRotation(origin.rotX, origin.rotY, origin.rotZ);
-    if(lr)toggleFlat();
+    updateLock();
     refreshNeeded = true;
     status("Arranged "+numWindowsS());
 }
@@ -765,22 +865,15 @@ async function toggleAnchor(updateStatus){
                 posY:trnsfrm.posY-tf.posY,
                 posZ:trnsfrm.posZ-tf.posZ,
                 orgRot: origin,
-                targRot: target
+                targRot: target,
+                size: trnsfrm.size/tf.size,
+                orgSize: tf.size
             };
         }
         save();
-        if(wasFlat){
-            anchorEnabled = !anchorEnabled;
-            await toggleFlat();
-            anchorEnabled = !anchorEnabled;
-        }
+        updateLock();
         if(updateStatus)status("Saved "+numWindows()+" window offsets");
     }else{
-        wasFlat = lockRot;
-        if(lockRot){
-            await toggleFlat();
-            document.getElementById("toggle-flat").innerHTML = "Unlock Rotation";
-        }
         if(updateStatus)status("Adjusting window offsets");
     }
     anchorEnabled = !anchorEnabled;
@@ -808,19 +901,22 @@ async function toggleSnap(){
     document.getElementById("toggle-snap").innerHTML = snapEnabled?"Disable snapping":"Enable snapping";
 }
 async function toggleFlat(){
-    if(!lockRot){
+    if(!lRX||!lRZ){
         if(!anchorEnabled)toggleAnchor();
-        lockedRot = await new OVRTOverlay(uid).getTransform();
+        updateLock();
         status("XZ Rotation locked");
+        lRX = lRZ = true;
     }else{
         let o = new OVRTOverlay(uid);
         let t = await o.getTransform();
         o.setRotation(lockedRot.rotX,t.rotY,lockedRot.rotZ);
         status("XZ Rotation unlocked");
+        lRX = lRZ = false;
     }
-    lockRot = !lockRot;
     save();
-    document.getElementById("toggle-flat").innerHTML = lockRot?"Unlock Rotation":"Lock rotation";
+    document.getElementById("lock-rx").innerHTML = lRX?"Unlock Pitch":"Lock Pitch";
+    document.getElementById("lock-rz").innerHTML = lRZ?"Unlock Roll":"Lock Roll";
+    document.getElementById("toggle-flat").innerHTML = (lRX&&lRZ)?"Unlock Rotation":"Lock rotation";
 }
 async function toggleLock(){
     if(!lockPos){
@@ -1479,6 +1575,44 @@ function oscDeviceRotRangeDec(key){
     document.getElementById("osc-device-rotx-range").innerHTML = "±"+osc.rotX.range;
     document.getElementById("osc-device-roty-range").innerHTML = "±"+osc.rotY.range;
     document.getElementById("osc-device-rotz-range").innerHTML = "±"+osc.rotZ.range;
+}
+function lockScale(){
+    lS = !lS;
+    document.getElementById("lock-scale").innerHTML = lS?"Unlock Scale":"Lock Scale";
+    updateLock();
+}
+function lockX(){
+    lX = !lX;
+    document.getElementById("lock-x").innerHTML = lX?"Unlock X Position":"Lock X Position";
+    updateLock();
+}
+function lockY(){
+    lY = !lY;
+    document.getElementById("lock-y").innerHTML = lY?"Unlock Y Position":"Lock Y Position";
+    updateLock();
+}
+function lockZ(){
+    lZ = !lZ;
+    document.getElementById("lock-z").innerHTML = lZ?"Unlock Z Position":"Lock Z Position";
+    updateLock();
+}
+function lockRX(){
+    lRX = !lRX;
+    document.getElementById("lock-rx").innerHTML = lRX?"Unlock Pitch":"Lock Pitch";
+    updateLock();
+}
+function lockRY(){
+    lRY = !lRY;
+    document.getElementById("lock-ry").innerHTML = lRY?"Unlock Yaw":"Lock Yaw";
+    updateLock();
+}
+function lockRZ(){
+    lRZ = !lRZ;
+    document.getElementById("lock-rz").innerHTML = lRZ?"Unlock Roll":"Lock Roll";
+    updateLock();
+}
+async function updateLock(){
+    lockedRot = await new OVRTOverlay(uid).getTransform();
 }
 /*
  * Quaternion functions below are modified from quaternion.js

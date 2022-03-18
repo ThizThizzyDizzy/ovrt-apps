@@ -688,3 +688,45 @@ label{
   height: 7%;
   width: 7%;
 }
+.lock-scale{
+  left: 0%;
+  top: 33%;
+  width: 50%;
+  height: 7%;
+}
+.lock-x{
+  left: 0%;
+  top: 40%;
+  width: 50%;
+  height: 7%;
+}
+.lock-y{
+  left: 0%;
+  top: 47%;
+  width: 50%;
+  height: 7%;
+}
+.lock-z{
+  left: 0%;
+  top: 54%;
+  width: 50%;
+  height: 7%;
+}
+.lock-rx{
+  left: 0%;
+  top: 61%;
+  width: 50%;
+  height: 7%;
+}
+.lock-ry{
+  left: 0%;
+  top: 68%;
+  width: 50%;
+  height: 7%;
+}
+.lock-rz{
+  left: 0%;
+  top: 75%;
+  width: 50%;
+  height: 7%;
+}
