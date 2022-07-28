@@ -26,7 +26,7 @@ var webContents = {
 	"height": 8
 };
 
-function openWindow() {
+function initWatchdog() {
     recievedStartupCommand = true;
 	if (apiInit) {
 		IsAppRunningWithTitle("OVRT Watchdog");

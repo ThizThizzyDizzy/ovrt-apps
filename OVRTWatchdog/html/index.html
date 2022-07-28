@@ -2,14 +2,13 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
         <link rel="stylesheet" href="index.css">
         <title>OVRT Watchdog</title>
     </head>
     <body>
-        <button class="the-big-button" onclick="openWindow()">Enable Watchdog</button>
+        <button class="init-button" onclick="initWatchdog()">Enable Watchdog</button>
         <p align="center">Note: this may use a lot of CPU usage in very long sessions or if OVRT has a mental breakdown</p>
-        <h3 class="title" button id="openedText" style="opacity: 0;">Watchdog is now active!</h3>
+        <h3 class="title" id="openedText" style="opacity: 0;">Watchdog is now active!</h3>
         <script src="js/main.js"></script>
     </body>
 </html>
