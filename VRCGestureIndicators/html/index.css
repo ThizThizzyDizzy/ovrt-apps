@@ -1,0 +1,94 @@
+body {
+    background-color: #333333;
+    font-family: 'Segoe UI', sans-serif;
+}
+button{
+    position: fixed;
+    background-color: #999999;
+    color: #333333;
+    border: none;
+    user-select: none;
+    padding: 0px 0px 0px 0px;
+}
+button:hover{
+    background-color: #DADADA;
+}
+button:active{
+    background-color: #6B6B6B;
+}
+label{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    background-color: #7F7F7F;
+    color: #222222;
+    user-select: none;
+}
+.title{
+  font-size: 32px;
+  left: 0%;
+  top: 0%;
+  width: 400px;
+  height: 45px;
+}
+.btn-spawn-left{
+    left: 0px;
+    top: 80px;
+    width: 198.5px;
+    height: 80px;
+    font-size: 28px;
+}
+.btn-spawn-right{
+    left: 202.5px;
+    top: 80px;
+    width: 198.5px;
+    height: 80px;
+    font-size: 28px;
+}
+.btn-lock{
+  left: 0px;
+  top: 220px;
+  width: 198.5px;
+  height: 50px;
+  font-size: 24px;
+}
+.btn-unlock{
+  left: 202.5px;
+  top: 220px;
+  width: 198.5px;
+  height: 50px;
+  font-size: 24px;
+}
+.btn-attach{
+  left: 0px;
+  top: 320px;
+  width: 198.5px;
+  height: 50px;
+  font-size: 20px;
+}
+.btn-detach{
+  left: 202.5px;
+  top: 320px;
+  width: 198.5px;
+  height: 50px;
+  font-size: 20px;
+}
+.support{
+  left: 0px;
+  top: 430px;
+  width: 401px;
+  height: 20px;
+}
+.kofi{
+  left: 0px;
+  top: 450px;
+  width: 401px;
+  height: 20px;
+}
+.patreon{
+  left: 0px;
+  top: 470px;
+  width: 401px;
+  height: 20px;
+}
