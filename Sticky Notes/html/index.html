@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <label class="title">Sticky Notes</label>
+        <button class="clear-data" onclick="clearData()">Clear ALL Sticky Note data</button>
+        <div id="patreon">
+            <label class="patreon">Enjoying Sticky Notes? Consider supporting me on patreon:</label>
+            <label class="patreon-lnk">patreon.com/ThizThizzyDizzy</label>
+        </div>
+        <label id="status" class="status"></label>
+        <button class="col-yellow" onclick="spawn(0)"></button>
+        <button class="col-green" onclick="spawn(1)"></button>
+        <button class="col-pink" onclick="spawn(2)"></button>
+        <button class="col-purple" onclick="spawn(3)"></button>
+        <button class="col-blue" onclick="spawn(4)"></button>
+        <button class="col-orange" onclick="spawn(5)"></button>
+        <button class="col-lightgray" onclick="spawn(6)"></button>
+        <button class="col-darkgray" onclick="spawn(7)"></button>
+        <script src="js/helper.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
