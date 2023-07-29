@@ -9,7 +9,7 @@ const panelId = urlParams.get("id");
 const width = urlParams.get("width");
 const height = urlParams.get("height");
 var storage = window.localStorage;
-var data = JSON.parse(storage.getItem("osc_macros"));
+var data = JSON.parse(storage.getItem("osc_macros_"+panelId));
 var page = 0;
 API.on("message", async function (event){
     let msg = event.message;
@@ -41,7 +41,7 @@ let str = "";
 let btnIdx = 0;
 for(let y = 0; y<height; y++){
     for(let x = 0; x<width; x++){
-        str+="<button onclick='runMacro("+btnIdx+")' style='position:fixed; left:"+x*200+"px; top:"+y*200+"px;"+(data[btnIdx].toggled?" background-color=#80c0e0;":"")+"' id='macro-"+btnIdx+"'>"+data[btnIdx].label+"</button>";
+        str+="<button onclick='runMacro("+btnIdx+")' style='position:fixed; left:"+x*200+"px; top:"+y*200+"px;"+(data[btnIdx][0].toggled?" background-color=#80c0e0;":"")+"' id='macro-"+btnIdx+"'>"+data[btnIdx][0].label+"</button>";
         btnIdx++;
     }
     str+="<br>";
