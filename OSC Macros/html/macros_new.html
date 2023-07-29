@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <link rel="stylesheet" href="macros_new.css">
+    </head>
+    <body>
+        <div class="macros" id="macros"></div>
+        <div class="settings" id="settings" hidden>
+            <input type="text" class="in-label" id="in-label" onchange="buttonLabelChange()">
+            <label class="lbl-page" id="lbl-page" hidden>Page 0</label>
+            <input type="text" class="in-path" id="in-path" onchange="buttonPathChange()">
+            <input type="text" class="in-val" id="in-val" onchange="buttonValueChange()">
+            <input type="text" class="in-delay" id="in-delay" onchange="buttonDelayChange()">
+            <label class="lbl-delay" id="lbl-delay">Delay</label>
+            <button class="btn-type" id="btn-type" onclick="buttonTypeChange()"></button>
+            <button class="btn-save" onclick="buttonSaveSettings()">Save</button>
+            <button class="btn-del" id="btn-del" onclick="buttonDelete()">-</button>
+            <button class="btn-prev" id="btn-prev" onclick="buttonPrevious()">&lt;</button>
+            <button class="btn-next" id="btn-next" onclick="buttonNext()">&gt;</button>
+        </div>
+        <script src="js/helper.js"></script>
+        <script src="js/macros_new.js"></script>
+    </body>
+</html>

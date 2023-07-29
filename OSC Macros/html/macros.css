@@ -1,0 +1,61 @@
+body {
+    background-color: #333333;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    height:100%
+}
+button{
+    background-color: #999999;
+    color: #333333;
+    font-size: 32px;
+    border: 2px solid;
+    user-select: none;
+    width: 200px;
+    height: 200px;
+    padding: 0px 0px;
+    white-space: normal;
+}
+button:hover{
+  background-color: #DADADA;
+}
+button:active{
+  background-color: #6B6B6B;
+}
+input:focus{
+    outline: none;
+}
+input{
+    font-size: 20px;
+    background-color: #999999;
+    color: #333333;
+    border: 2px solid;
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+}
+label{
+    font-size: 20px;
+    display: inline-block;
+    background-color: #7F7F7F;
+    color: #222222;
+    user-select: none;
+    text-align: center;
+}
+.macros{
+    line-height: 0;
+}
+.btn-type{
+    height: 50px;
+    width: 50%;
+    float: left;
+}
+.btn-save{
+    height: 55px;
+    width: 50%;
+    float: left;
+}
+.settings{
+    line-height: 0;
+}

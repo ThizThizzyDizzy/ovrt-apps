@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <link rel="stylesheet" href="macros.css">
+    </head>
+    <body>
+        <div class="macros" id="macros"></div>
+        <div class="settings" id="settings" hidden>
+            <input type="text" class="in-label" id="in-label" onchange="buttonLabelChange()">
+            <label class="in-label" id="lbl-label" hidden>asdf</label>br>
+            <input type="text" class="in-path" id="in-path" onchange="buttonPathChange()"><br>
+            <input type="text" class="in-val" id="in-val" onchange="buttonValueChange()"><br>
+            <button class="btn-type" id="btn-type" onclick="buttonTypeChange()"></button>
+            <button class="btn-save" onclick="buttonSaveSettings()">Save</button>
+        </div>
+        <script src="js/helper.js"></script>
+        <script src="js/macros.js"></script>
+    </body>
+</html>

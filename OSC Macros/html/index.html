@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <label class="title">OSC Macros</label>
+        <button class="clear-data" onclick="clearData()">Clear ALL Macro data</button>
+        <div id="patreon" hidden>
+            <label class="patreon">Enjoying OSC Macros? Consider supporting me on patreon:</label>
+            <label class="patreon-lnk">patreon.com/ThizThizzyDizzy</label>
+        </div>
+        <label id="status" class="status"></label>
+
+        <button class="dec-height" onclick="decHeight()">−</button>
+        <button class="inc-height" onclick="incHeight()">+</button>
+        <label class="height" id="height">1</label>
+        <button class="dec-width" onclick="decWidth()">−</button>
+        <button class="inc-width" onclick="incWidth()">+</button>
+        <label class="width" id="width">1</label>
+        <label class="lbl-height">Height</label>
+        <label class="lbl-width">Width</label>
+        <button class="spawn" onclick="spawnMacros()">Spawn Macro Pad</button>
+        <button class="edit" id="edit" onclick="editMacros()">Edit Macros</button>
+        <script src="js/helper.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
