@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OVRT Window Anchor</title>
+    <link rel="stylesheet" href="anchor.css">
+  </head>
+  <body>
+    <label class="header" id="header">Starting Up</label>
+    <div id="div-main">
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Attach the nearest window')" class="attach" onclick="attach()">Attach</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Detach the farthest window')" class="detach" onclick="detach()">Detach</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Adjust window positions')" class="toggle-anchor" id="toggle-anchor" onclick="toggleAnchor(true)">Adjust Offsets</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Snap to window edges while adjusting')" class="toggle-snap" id="toggle-snap" onclick="toggleSnap()">Enable Snapping</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Equalize size, curve, and opacity')" class="equalize" onclick="equalizeWindows()">Equalize Transforms</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Straighten windows (set roll to 0)')" class="straighten" onclick="straightenWindows()">Straighten</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Flatten windows (set pitch and roll to 0)')" class="flatten" onclick="flattenWindows()">Flatten</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Arrange all windows')" class="arrange" onclick="arrangeWindows()">Arrange</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Arrange all windows; reversed order')" class="arrange-flipped" onclick="arrangeWindows(true)">Arrange Inverted</button>
+      <label class="curve">Curve</label>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease window curvature by 5%')" class="curve-less" onclick="lessCurve()">−</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase window curvature by 5%')" class="curve-more" onclick="moreCurve()">+</button>
+      <label class="alpha">Opacity</label>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease window opacity by 5%')" class="alpha-less" onclick="lessOpacity()">−</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase window opacity by 5%')" class="alpha-more" onclick="moreOpacity()">+</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Lock Pitch/Roll rotation (For curved windows)')" class="toggle-flat" id="toggle-flat" onclick="toggleFlat()">Lock Rotation</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Lock movement')" class="toggle-lock" id="toggle-lock" onclick="toggleLock()">Lock</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip(moveAny?'Limit movement to anchor only':'Allow movement by any window (Unstable)')" class="toggle-move" id="toggle-move" onclick="toggleMove()">Grab Anchor<br>to Move</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Advanced Settings Menu')" class="settings" onclick="switchMenu('div-main', 'div-settings')">Advanced Settings</button>
+    </div>
+    <div id="div-settings" hidden>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Back to the main menu')" class="settings" onclick="switchMenu('div-settings', 'div-main')">Done</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('VRChat OSC Settings Menu')" class="osc-settings" onclick="switchMenu('div-settings', 'div-osc')">OSC Settings</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease aspect ratio X')" class="dec-asp-x" onclick="decAspX()">−</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase aspect ratio X')" class="inc-asp-x" onclick="incAspX()">+</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease aspect ratio Y')" class="dec-asp-y" onclick="decAspY()">−</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase aspect ratio Y')" class="inc-asp-y" onclick="incAspY()">+</button>
+      <label class="aspect-ratio-header">Aspect Ratio (Snapping)</label>
+      <label class="aspect-ratio" id="aspect-ratio">Loading</label>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Increase window smoothing')" class="inc-lerp" onclick="incLerp()">+</button>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Decrease window smoothing')" class="dec-lerp" onclick="decLerp()">−</button>
+      <label class="lerped-header">Window Smoothing</label>
+      <label class="lerped" id="lerp-smoothing">Loading</label>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Smooths only small movements')" class="adv-smooth" id="advanced-smoothing" onclick="microSmooth()">Stabilization OFF</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock scaling of anchor')" class="lock-scale" id="lock-scale" onclick="lockScale()">Lock Scale</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor movement along X axis')" class="lock-x" id="lock-x" onclick="lockX()">Lock X Movement</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor movement along Y axis')" class="lock-y" id="lock-y" onclick="lockY()">Lock Y Movement</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor movement along Z axis')" class="lock-z" id="lock-z" onclick="lockZ()">Lock Z Movement</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor pitch rotation')" class="lock-rx" id="lock-rx" onclick="lockRX()">Lock Pitch</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor yaw rotation')" class="lock-ry" id="lock-ry" onclick="lockRY()">Lock Yaw</button>
+      <button onmouseout="resetTooltip" onmouseover="tooltip('Lock anchor roll rotation')" class="lock-rz" id="lock-rz" onclick="lockRZ()">Lock Roll</button>
+    </div>
+    <div id="div-osc" hidden>
+      <button onmouseout="resetTooltip()" onmouseover="tooltip('Back to Advanced Settings')" class="osc-settings" onclick="switchMenu('div-osc', 'div-settings')">Back</button>
+      <input type="text" class="osc-prefix" id="osc-prefix" value="/avatar/parameters/" onchange="oscPrefixChange()">
+      <div id="div-osc-windows">
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Switch to devices')" class="osc-switch-menu" onclick="switchMenu('div-osc-windows', 'div-osc-devices')">Windows</button>
+        <label class="osc-label" id="osc-window">This window</label>
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Previous window')" class="osc-prev" onclick="oscPrevWindow()">&lt;</button>
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Next window')" class="osc-next" onclick="oscNextWindow()">&gt;</button>
+        <label class="osc-lbl1">X</label>
+        <label class="osc-lbl2">Y</label>
+        <label class="osc-lbl3">Z</label>
+        <label class="osc-lbl4">rX</label>
+        <label class="osc-lbl5">rY</label>
+        <label class="osc-lbl6">rZ</label>
+        <label class="osc-lbl7">LA</label>
+        <label class="osc-lbl8">Sz</label>
+        <label class="osc-lbl9">Cv</label>
+        <label class="osc-lbl10">Op</label>
+        <input type="text" class="osc1" id="osc-window-posX" value="posX" onchange="oscWindowChange('posX')"/>
+        <input type="text" class="osc2" id="osc-window-posY" value="posY" onchange="oscWindowChange('posY')"/>
+        <input type="text" class="osc3" id="osc-window-posZ" value="posZ" onchange="oscWindowChange('posZ')"/>
+        <input type="text" class="osc4" id="osc-window-rotX" value="rotX" onchange="oscWindowChange('rotX')"/>
+        <input type="text" class="osc5" id="osc-window-rotY" value="rotY" onchange="oscWindowChange('rotY')"/>
+        <input type="text" class="osc6" id="osc-window-rotZ" value="rotZ" onchange="oscWindowChange('rotZ')"/>
+        <input type="text" class="osc7" id="osc-window-angle" value="lookAngle" onchange="oscWindowChange('angle')"/>
+        <input type="text" class="osc8" id="osc-window-size" value="size" onchange="oscWindowChange('size')"/>
+        <input type="text" class="osc9" id="osc-window-curve" value="curvature" onchange="oscWindowChange('curve')"/>
+        <input type="text" class="osc10" id="osc-window-alpha" value="opacity" onchange="oscWindowchange('alpha')"/>
+        <button class="osc-type1" id="osc-window-posx-type" onclick="oscWindowType('posX')">Off</button>
+        <button class="osc-type2" id="osc-window-posy-type" onclick="oscWindowType('posY')">Off</button>
+        <button class="osc-type3" id="osc-window-posz-type" onclick="oscWindowType('posZ')">Off</button>
+        <button class="osc-type4" id="osc-window-rotx-type" onclick="oscWindowType('rotX')">Off</button>
+        <button class="osc-type5" id="osc-window-roty-type" onclick="oscWindowType('rotY')">Off</button>
+        <button class="osc-type6" id="osc-window-rotz-type" onclick="oscWindowType('rotZ')">Off</button>
+        <button class="osc-type7" id="osc-window-angle-type" onclick="oscWindowType('angle')">Off</button>
+        <button class="osc-type8" id="osc-window-size-type" onclick="oscWindowType('size')">Off</button>
+        <button class="osc-type9" id="osc-window-curve-type" onclick="oscWindowType('curve')">Off</button>
+        <button class="osc-type10" id="osc-window-alpha-type" onclick="oscWindowType('alpha')">Off</button>
+        <button class="osc-range-inc1" onclick="oscWindowPosRangeInc('posX')">+</button>
+        <button class="osc-range-inc2" onclick="oscWindowPosRangeInc('posY')">+</button>
+        <button class="osc-range-inc3" onclick="oscWindowPosRangeInc('posZ')">+</button>
+        <button class="osc-range-inc4" onclick="oscWindowRotRangeInc('rotX')">+</button>
+        <button class="osc-range-inc5" onclick="oscWindowRotRangeInc('rotY')">+</button>
+        <button class="osc-range-inc6" onclick="oscWindowRotRangeInc('rotZ')">+</button>
+        <button class="osc-range-inc7" onclick="oscWindowAngleRangeInc()">+</button>
+        <button class="osc-range-inc8" onclick="oscWindowSizeRangeInc()">+</button>
+        <label class="osc-range1" id="osc-window-posx-range">±1</label>
+        <label class="osc-range2" id="osc-window-posy-range">±1</label>
+        <label class="osc-range3" id="osc-window-posz-range">±1</label>
+        <label class="osc-range4" id="osc-window-rotx-range">±180</label>
+        <label class="osc-range5" id="osc-window-roty-range">±180</label>
+        <label class="osc-range6" id="osc-window-rotz-range">±180</label>
+        <label class="osc-range7" id="osc-window-angle-range">0-90</label>
+        <label class="osc-range8" id="osc-window-size-range">0-1</label>
+        <button class="osc-range-dec1" onclick="oscWindowPosRangeDec('posX')">−</button>
+        <button class="osc-range-dec2" onclick="oscWindowPosRangeDec('posY')">−</button>
+        <button class="osc-range-dec3" onclick="oscWindowPosRangeDec('posZ')">−</button>
+        <button class="osc-range-dec4" onclick="oscWindowRotRangeDec('rotX')">−</button>
+        <button class="osc-range-dec5" onclick="oscWindowRotRangeDec('rotY')">−</button>
+        <button class="osc-range-dec6" onclick="oscWindowRotRangeDec('rotZ')">−</button>
+        <button class="osc-range-dec7" onclick="oscWindowAngleRangeDec()">−</button>
+        <button class="osc-range-dec8" onclick="oscWindowSizeRangeDec()">−</button>
+      </div>
+      <div id="div-osc-devices" hidden>
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Switch to windows')" class="osc-switch-menu" onclick="switchMenu('div-osc-devices', 'div-osc-windows')">Devices</button>
+        <label class="osc-label" id="osc-device">Headset</label>
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Previous device')" class="osc-prev" onclick="oscPrevDevice()">&lt;</button>
+        <button onmouseout="resetTooltip()" onmouseover="tooltip('Next device')" class="osc-next" onclick="oscNextDevice()">&gt;</button>
+        <label class="osc-lbl1">X</label>
+        <label class="osc-lbl2">Y</label>
+        <label class="osc-lbl3">Z</label>
+        <label class="osc-lbl4">rX</label>
+        <label class="osc-lbl5">rY</label>
+        <label class="osc-lbl6">rZ</label>
+        <label class="osc-lbl7">tX</label>
+        <label class="osc-lbl8">tY</label>
+        <input type="text" class="osc1" id="osc-device-posX" value="posX" onchange="oscDeviceChange('posX')"/>
+        <input type="text" class="osc2" id="osc-device-posY" value="posY" onchange="oscDeviceChange('posY')"/>
+        <input type="text" class="osc3" id="osc-device-posZ" value="posZ" onchange="oscDeviceChange('posZ')"/>
+        <input type="text" class="osc4" id="osc-device-rotX" value="rotX" onchange="oscDeviceChange('rotX')"/>
+        <input type="text" class="osc5" id="osc-device-rotY" value="rotY" onchange="oscDeviceChange('rotY')"/>
+        <input type="text" class="osc6" id="osc-device-rotZ" value="rotZ" onchange="oscDeviceChange('rotZ')"/>
+        <input type="text" class="osc7" id="osc-device-trkX" value="trackpadX" onchange="oscDeviceChange('trkX')"/>
+        <input type="text" class="osc8" id="osc-device-trkY" value="trackpadY" onchange="oscDeviceChange('trkY')"/>
+        <button class="osc-type1" id="osc-device-posx-type" onclick="oscDeviceType('posX')">Off</button>
+        <button class="osc-type2" id="osc-device-posy-type" onclick="oscDeviceType('posY')">Off</button>
+        <button class="osc-type3" id="osc-device-posz-type" onclick="oscDeviceType('posZ')">Off</button>
+        <button class="osc-type4" id="osc-device-rotx-type" onclick="oscDeviceType('rotX')">Off</button>
+        <button class="osc-type5" id="osc-device-roty-type" onclick="oscDeviceType('rotY')">Off</button>
+        <button class="osc-type6" id="osc-device-rotz-type" onclick="oscDeviceType('rotZ')">Off</button>
+        <button class="osc-type7" id="osc-device-trkx-type" onclick="oscDeviceType('trkX')">Off</button>
+        <button class="osc-type8" id="osc-device-trky-type" onclick="oscDeviceType('trkY')">Off</button>
+        <button class="osc-range-inc1" onclick="oscDevicePosRangeInc('posX')">+</button>
+        <button class="osc-range-inc2" onclick="oscDevicePosRangeInc('posY')">+</button>
+        <button class="osc-range-inc3" onclick="oscDevicePosRangeInc('posZ')">+</button>
+        <button class="osc-range-inc4" onclick="oscDeviceRotRangeInc('rotX')">+</button>
+        <button class="osc-range-inc5" onclick="oscDeviceRotRangeInc('rotY')">+</button>
+        <button class="osc-range-inc6" onclick="oscDeviceRotRangeInc('rotZ')">+</button>
+        <label class="osc-range1" id="osc-device-posx-range">±1</label>
+        <label class="osc-range2" id="osc-device-posy-range">±1</label>
+        <label class="osc-range3" id="osc-device-posz-range">±1</label>
+        <label class="osc-range4" id="osc-device-rotx-range">±180</label>
+        <label class="osc-range5" id="osc-device-roty-range">±180</label>
+        <label class="osc-range6" id="osc-device-rotz-range">±180</label>
+        <button class="osc-range-dec1" onclick="oscDevicePosRangeDec('posX')">−</button>
+        <button class="osc-range-dec2" onclick="oscDevicePosRangeDec('posY')">−</button>
+        <button class="osc-range-dec3" onclick="oscDevicePosRangeDec('posZ')">−</button>
+        <button class="osc-range-dec4" onclick="oscDeviceRotRangeDec('rotX')">−</button>
+        <button class="osc-range-dec5" onclick="oscDeviceRotRangeDec('rotY')">−</button>
+        <button class="osc-range-dec6" onclick="oscDeviceRotRangeDec('rotZ')">−</button>
+      </div>
+    </div>
+    <label class="status" id="status">Waiting for Initialization</label>
+    <script src="js/helper.js"></script>
+    <script src="js/thizkit-core.js"></script>
+    <script src="js/thizkit-anchor.js"></script>
+  </body>
+</html>

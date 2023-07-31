@@ -259,7 +259,7 @@ class OVRT {
 		window.addEventListener("overlay-touched", evt => this._emit("overlay-touched", evt));
 		window.addEventListener("device-position", evt => this._emit("device-position", evt));
 		window.addEventListener("interacting", evt => this._emit("interacting", evt));
-		window.addEventListener("overlay-message", evt => this._emit("message", evt));
+		window.addEventListener("overlay-message", evt => this._emit("overlay-message", evt));
 		window.addEventListener("overlay-opened", evt => this._emit("overlay-opened", evt));
 		window.addEventListener("overlay-closed", evt => this._emit("overlay-closed", evt));
 		window.addEventListener("overlay-changed", evt => this._emit("overlay-changed", evt));
