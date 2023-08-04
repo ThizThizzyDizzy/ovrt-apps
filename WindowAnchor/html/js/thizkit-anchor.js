@@ -64,15 +64,6 @@ API.getUniqueID().then(async function(id){
     if(data.snapEnabled)toggleSnap();
     let o = new OVRTOverlay(uid);
     selfTransform = await o.getTransform();
-    if(data.lX||data.lY||data.lZ){
-        o.setPosition(data.lockX?lockedRot.posX:selfTransform.posX,data.lY?lockedRot.PosY:selfTransform.posY,data.lZ?lockedRot.posZ:selfTransform.posZ);
-    }
-    if(data.lockRot||data.lRX||data.lRY||data.lRZ){
-        o.setRotation(data.lockRot||data.lRX?lockedRot.rotX:selfTransform.rotX,data.lRY?lockedRot.rotY:selfTransform.rotY,data.lockRot||data.lRZ?lockedRot.rotZ:selfTransform.rotZ);
-    }
-    if(data.lS){
-        o.setSize(data.lS?lockedRot.size:selfTransform.size);
-    }
     if(data.lX)lockX();
     if(data.lY)lockY();
     if(data.lZ)lockZ();
@@ -109,14 +100,25 @@ API.on("message", function (event){
 });
 API.on("overlay-changed", async function (event){
     if(startingUp||updatingLoc)return;
-    sendWindowOSC(-1, await new OVRTOverlay(uid).getTransform());
     if(uid===event.uid){
         let fastest = null;
         let fastestDiff = 0;
         let numFast = 0;
+        let promiseArray = [];
+        let promiseIds = [];
+        for(const id in data.linkedWindows){
+            promiseArray.push(data.linkedWindows[id].overlay.getTransform());
+            promiseIds.push(id);
+        }
+        promiseArray.push(new OVRTOverlay(uid).getTransform());
+        let transforms = await Promise.all(promiseArray);
+        for(let i = 0; i<transforms.length-1; i++){
+            let id = promiseIds[i];
+            if(data.linkedWindows[id])data.linkedWindows[id].transform = transforms[i];
+        }
         for(const id in data.linkedWindows){
             let transform = data.linkedWindows[id].transform;
-            let tf = await data.linkedWindows[id].overlay.getTransform();
+            let tf = data.linkedWindows[id].transform;
             let dx = tf.posX-transform.posX;
             let dy = tf.posY-transform.posY;
             let dz = tf.posZ-transform.posZ;
@@ -132,7 +134,7 @@ API.on("overlay-changed", async function (event){
                     fastestDiff = dist;
                 }
             }
-            data.linkedWindows[id].transform = tf;
+            if(data.linkedWindows[id])data.linkedWindows[id].transform = tf;
         }
         let sdx = event.transform.posX-selfTransform.posX;
         let sdy = event.transform.posY-selfTransform.posY;
@@ -150,9 +152,11 @@ API.on("overlay-changed", async function (event){
             rotY: event.transform.rotY,
             rotZ: event.transform.rotZ,
             size: event.transform.size,
-            curvature: event.transform.curvature,
-            opacity: event.transform.opacity
+            curvature: transforms[transforms.length-1].curvature,
+            opacity: transforms[transforms.length-1].opacity,
+            attachedDevice: transforms[transforms.length-1].attachedDevice
         };
+        sendWindowOSC(-1, selfTransform);
         let anchorMoving = selfDist>.00001;//||sdr>1;
 //        if(numFast===0&&!anchorMoving&&!refreshNeeded)return;//nothing's moved; do nothing CAUSES A BUNCH OF ISSUES
         if(snapEnabled){
@@ -380,7 +384,7 @@ API.on("overlay-changed", async function (event){
                     let posX = transform.posX+ox;
                     let posY = transform.posY+oy;
                     let posZ = transform.posZ+oz;
-                    let tf = await data.linkedWindows[wid].overlay.getTransform();
+                    let tf = data.linkedWindows[wid].transform;
                     let size = transform.size;
                     if(offset.size)size *= offset.size;
                     if(data.lerping>0||data.microSmooth){
@@ -521,6 +525,7 @@ async function attach(){
             orgSize:tf.size
         };
         window.overlay.setRecenter(false);
+        window.overlay.setAttachedDevice(0);
         data.linkedWindows[closest] = window;
         API.spawnOverlay({
             posX: window.transform.posX,
@@ -556,10 +561,12 @@ async function attach(){
 }
 async function getWindows(tf){
     let windows = {};
-    let overlays = JSON.parse(await API.getOverlays());
-    for(const id of overlays){
+    let overlays = await API.getOverlays();
+    let transforms = await getTransforms(overlays);
+    for(let i = 0; i<transforms.length; i++){
+        let id = overlays[i];
         let overlay = new OVRTOverlay(id);
-        let transform = await overlay.getTransform();
+        let transform = transforms[i];
         if(transform.attachedDevice===tf.attachedDevice&&id!==uid){
             windows[id] = {
                 overlay: overlay,
@@ -683,8 +690,12 @@ async function equalizeWindows(){
     let avgSize = 0;
     let avgOpacity = 0;
     let avgCurve = 0;
+    let promiseArray = [];
     for(const id in data.linkedWindows){
-        let tf = await data.linkedWindows[id].overlay.getTransform();
+        promiseArray.push(data.linkedWindows[id].overlay.getTransform());
+    }
+    let transforms = await Promise.all(promiseArray);
+    for(const tf of transforms){
         count++;
         avgSize+=tf.size;
         avgOpacity+=tf.opacity;
@@ -706,7 +717,7 @@ async function straightenWindows(){
     let we = anchorEnabled;
     if(we)toggleAnchor();
     let orly = new OVRTOverlay(uid);
-    let tf = await orly.getTransform();
+    let tf = selfTransform;
     orly.setRotation(tf.rotX,tf.rotY,0);
     for(const id in data.linkedWindows){
         let tf = data.linkedWindows[id].transform;
@@ -718,17 +729,15 @@ async function straightenWindows(){
 async function flattenWindows(){
     let we = anchorEnabled;
     if(we)toggleAnchor();
-    setTimeout(async function(){
-        let orly = new OVRTOverlay(uid);
-        let tf = await orly.getTransform();
-        orly.setRotation(0,tf.rotY,0);
-        for(const id in data.linkedWindows){
-            let tf = data.linkedWindows[id].transform;
-            data.linkedWindows[id].overlay.setRotation(0,tf.rotY,0);
-        }
-        if(we)toggleAnchor();
-        status("Flattened "+numWindowsS());
-    }, 1);
+    let orly = new OVRTOverlay(uid);
+    let tf = selfTransform;
+    orly.setRotation(0,tf.rotY,0);
+    for(const id in data.linkedWindows){
+        let tf = data.linkedWindows[id].transform;
+        data.linkedWindows[id].overlay.setRotation(0,tf.rotY,0);
+    }
+    if(we)toggleAnchor();
+    status("Flattened "+numWindowsS());
 }
 async function arrangeWindows(flip){
     if(!anchorEnabled)toggleAnchor();
@@ -744,11 +753,11 @@ async function arrangeWindows(flip){
         }
         overlays = overlays2;
     }
-    let origin = await overlays[0].getTransform();
+    let origin = selfTransform;
     let maxSize = 0;
     for(let i = 1; i<overlays.length; i++){
         let last = overlays[i-1];
-        let tf = await last.getTransform();
+        let tf = i==1?selfTransform:await last.getTransform();
         let overlay = overlays[i];
         let tf2 = await overlay.getTransform();
         if(tf2.size>maxSize)maxSize = tf.size;
@@ -854,7 +863,7 @@ async function moreOpacity(){
 async function toggleAnchor(updateStatus){
     if(!anchorEnabled){
         if(snapEnabled)toggleSnap();
-        let tf = await new OVRTOverlay(uid).getTransform();
+        let tf = selfTransform;
         for(const id in data.linkedWindows){
             let trnsfrm = await data.linkedWindows[id].overlay.getTransform();
             let origin = toQuat(tf.rotX, tf.rotY, tf.rotZ);
@@ -907,7 +916,7 @@ async function toggleFlat(){
         lRX = lRZ = true;
     }else{
         let o = new OVRTOverlay(uid);
-        let t = await o.getTransform();
+        let t = selfTransform;
         o.setRotation(lockedRot.rotX,t.rotY,lockedRot.rotZ);
         status("XZ Rotation unlocked");
         lRX = lRZ = false;
@@ -943,6 +952,13 @@ function getDist(p1, p2){
     let dy = p1.posY-p2.posY;
     let dz = p1.posZ-p2.posZ;
     return Math.sqrt(dx*dx+dy*dy+dz*dz);
+}
+async function getTransforms(overlays){
+    let promiseArray = [];
+    for(const overlay of overlays){
+        promiseArray.push(new OVRTOverlay(overlay).getTransform());
+    }
+    return Promise.all(promiseArray);
 }
 async function getUtilityOverlay(transform){
     if(utility===null){
@@ -1612,7 +1628,7 @@ function lockRZ(){
     updateLock();
 }
 async function updateLock(){
-    lockedRot = await new OVRTOverlay(uid).getTransform();
+    lockedRot = selfTransform;
 }
 /*
  * Quaternion functions below are modified from quaternion.js
