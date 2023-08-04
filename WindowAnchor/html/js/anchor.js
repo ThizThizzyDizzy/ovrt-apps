@@ -117,11 +117,8 @@ API.on("overlay-changed", async function (event){
         let transforms = await Promise.all(promiseArray);
         for(let i = 0; i<transforms.length-1; i++){
             let id = promiseIds[i];
-            if(data.linkedWindows[id])data.linkedWindows[id].transform = transforms[i];
-        }
-        for(const id in data.linkedWindows){
             let transform = data.linkedWindows[id].transform;
-            let tf = data.linkedWindows[id].transform;
+            let tf = transforms[i];
             let dx = tf.posX-transform.posX;
             let dy = tf.posY-transform.posY;
             let dz = tf.posZ-transform.posZ;
