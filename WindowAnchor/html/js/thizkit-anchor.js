@@ -717,7 +717,7 @@ async function straightenWindows(){
     let we = anchorEnabled;
     if(we)toggleAnchor();
     let orly = new OVRTOverlay(uid);
-    let tf = selfTransform;
+    let tf = selfTransform.attachedDevice===0?await new OVRTOverlay(uid).getTransform():selfTransform;
     orly.setRotation(tf.rotX,tf.rotY,0);
     for(const id in data.linkedWindows){
         let tf = data.linkedWindows[id].transform;
@@ -730,7 +730,7 @@ async function flattenWindows(){
     let we = anchorEnabled;
     if(we)toggleAnchor();
     let orly = new OVRTOverlay(uid);
-    let tf = selfTransform;
+    let tf = selfTransform.attachedDevice===0?await new OVRTOverlay(uid).getTransform():selfTransform;
     orly.setRotation(0,tf.rotY,0);
     for(const id in data.linkedWindows){
         let tf = data.linkedWindows[id].transform;
@@ -863,7 +863,7 @@ async function moreOpacity(){
 async function toggleAnchor(updateStatus){
     if(!anchorEnabled){
         if(snapEnabled)toggleSnap();
-        let tf = selfTransform;
+        let tf = selfTransform.attachedDevice===0?await new OVRTOverlay(uid).getTransform():selfTransform;
         for(const id in data.linkedWindows){
             let trnsfrm = await data.linkedWindows[id].overlay.getTransform();
             let origin = toQuat(tf.rotX, tf.rotY, tf.rotZ);
