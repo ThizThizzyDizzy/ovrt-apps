@@ -6,9 +6,13 @@
         <title>OVRT Watchdog</title>
     </head>
     <body>
-        <button class="init-button" onclick="initWatchdog()">Enable Watchdog</button>
-        <p align="center">Note: this may use a lot of CPU usage in very long sessions or if OVRT has a mental breakdown</p>
-        <h3 class="title" id="openedText" style="opacity: 0;">Watchdog is now active!</h3>
+        <label class="title">OVRToolkit Watchdog</label>
+        <button class="enable" onclick="initWatchdog()">Enable</button>
+        <label class="warning">Note: this may use a lot of CPU usage in very long sessions or if OVRT has a mental breakdown</label>
+        <label class="output" id="openedText"></label>
+        <button class="mode-console" onclick="setMode('console')">Console Mode</button>
+        <button class="mode-background" onclick="setMode('background')">Background Mode</button>
+        <script src="js/helper.js"></script>
         <script src="js/main.js"></script>
     </body>
 </html>

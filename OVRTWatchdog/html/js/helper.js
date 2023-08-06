@@ -26,6 +26,16 @@ window.APIInit = function() {
 	
 };
 
+window.AppOpened = function() {
+	window.GLOBAL_API_READY = true;
+
+	const event = new Event("app-opened");
+	setTimeout(() => { // can't execute the event code in the same context apparently
+		this.dispatchEvent(event);
+	}, 0);
+	
+};
+
 window.DevicePositionUpdate = function(deviceId, deviceInfo) {
 	const event = new CustomEvent("device-position", { detail: {
 		deviceId,
@@ -134,7 +144,7 @@ class OVRTOverlay {
 	}
 
 	setContent(type, content) {
-		window.SetContents(`${this._uid}`, type, JSON.stringify(content));
+		window.SetContents(`${this._uid}`, type, (type === 0) ? JSON.stringify(content) : content); // only browser data should be stringified
 	}
 
 	setPosition(x, y, z) {
@@ -228,7 +238,7 @@ class OVRTOverlay {
 	}
 	
 	setRenderingEnabled(enable) {
-		window.SetOverlaySetting(`${this._uid}`, 9, !enable);
+		window.SetOverlaySetting(`${this._uid}`, 9, enable);
 	}
 	
 	setInputBlocked(enable) {
@@ -241,6 +251,10 @@ class OVRTOverlay {
 	
 	setBrowserResolution(width, height) {
 		window.SetBrowserResolution(`${this._uid}`, width, height);
+	}
+	
+	bringToMe() {
+		window.BringToMe(`${this._uid}`);
 	}
 }
 
@@ -259,7 +273,7 @@ class OVRT {
 		window.addEventListener("overlay-touched", evt => this._emit("overlay-touched", evt));
 		window.addEventListener("device-position", evt => this._emit("device-position", evt));
 		window.addEventListener("interacting", evt => this._emit("interacting", evt));
-		window.addEventListener("overlay-message", evt => this._emit("message", evt));
+		window.addEventListener("overlay-message", evt => this._emit("overlay-message", evt));
 		window.addEventListener("overlay-opened", evt => this._emit("overlay-opened", evt));
 		window.addEventListener("overlay-closed", evt => this._emit("overlay-closed", evt));
 		window.addEventListener("overlay-changed", evt => this._emit("overlay-changed", evt));
@@ -350,21 +364,20 @@ class OVRT {
 	getWindowTitles() {
 		return new Promise((resolve) => {
 			const id = window.registerGlobalCallback(this, result => {
-				// Honestly no idea if this should be parsed? It's a Dictionary in C#.
-				return resolve(result[0]);
+				return resolve(JSON.parse(result[0]));
 			});
 
 			this._callAPIFunction("GetWindowTitles", [ "callGlobalCallback", id ]);
 		});
 	}
 	
-	getMonitorCount() {
+	getMonitorNames() {
 		return new Promise((resolve) => {
 			const id = window.registerGlobalCallback(this, result => {
-				return resolve(result[0]);
+				return resolve(JSON.parse(result[0]));
 			});
 
-			this._callAPIFunction("GetMonitorCount", [ "callGlobalCallback", id ]);
+			this._callAPIFunction("GetMonitorNames", [ "callGlobalCallback", id ]);
 		});
 	}
 	
@@ -398,6 +411,26 @@ class OVRT {
 		});
 	}
 	
+	getKeyboardBounds() {
+		return new Promise((resolve) => {
+			const id = window.registerGlobalCallback(this, result => {
+				return resolve(JSON.parse(result[0]));
+			});
+
+			this._callAPIFunction("GetKeyboardBounds", ["callGlobalCallback", id ]);
+		});
+	}
+	
+	getKeyboardSuggestionsBarEnabled() {
+		return new Promise((resolve) => {
+			const id = window.registerGlobalCallback(this, result => {
+				return resolve(result[0]);
+			});
+
+			this._callAPIFunction("GetKeyboardSuggestionsBarEnabled", ["callGlobalCallback", id ]);
+		});
+	}
+	
 	getSceneApplicationName() {
 		return new Promise((resolve) => {
 			const id = window.registerGlobalCallback(this, result => {
@@ -411,7 +444,7 @@ class OVRT {
 	getOverlays() {
 		return new Promise((resolve) => {
 			const id = window.registerGlobalCallback(this, result => {
-				return resolve(result[0]);
+				return resolve(JSON.parse(result[0]));
 			});
 
 			this._callAPIFunction("GetOverlays", ["callGlobalCallback", id ]);
@@ -468,8 +501,46 @@ class OVRT {
 		});
 	}
 	
+	getKeyboardTransform() {
+		return new Promise((resolve) => {
+			const id = window.registerGlobalCallback(this, result => {
+				return resolve(JSON.parse(result[0]));
+			});
+
+			this._callAPIFunction("GetKeyboardTransform", ["callGlobalCallback", id ]);
+		});
+	}
+	
 	sendOSCMessage(address, msg, type) {
 		this._callAPIFunction("SendOSCMessage", [ address, msg, type ]);
+	}
+	
+	sendOSCMessageArray(address, msg, type) {
+		this._callAPIFunction("SendOSCMessageArray", [ address, msg ]);
+	}
+	
+	getProfileList() { 
+		return new Promise((resolve) => { 
+			const id = window.registerGlobalCallback(this, result => { 
+				return resolve(JSON.parse(result[0])); 
+			}); 
+ 
+			this._callAPIFunction("ovrtGetProfileList", ["callGlobalCallback", id ]); 
+		}); 
+	} 
+	
+	getCurrentProfile() { 
+		return new Promise((resolve) => { 
+			const id = window.registerGlobalCallback(this, result => { 
+				return resolve(result[0]); 
+			}); 
+ 
+			this._callAPIFunction("ovrtGetCurrentProfile", ["callGlobalCallback", id ]); 
+		}); 
+	} 
+	
+	switchProfile(profileId) {
+		this._callAPIFunction("ovrtSwitchProfile", [ profileId ]);
 	}
 }
 
