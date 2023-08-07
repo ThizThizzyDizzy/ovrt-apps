@@ -594,8 +594,10 @@ function getClosestWindow(transform){
                 }
             }
             if(closest===null)reject();
-            windows[closest].id = closest;
-            resolve(windows[closest]);
+            else{
+                windows[closest].id = closest;
+                resolve(windows[closest]);
+            }
         });
     });
 }
