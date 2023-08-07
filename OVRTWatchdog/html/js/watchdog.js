@@ -2,7 +2,11 @@ const API = new OVRT({
     "function_queue": true
 });
 API.setCurrentBrowserTitle("OVRT Watchdog");
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const modeLock = urlParams.get("mode");
 var mode = "background";
+if(modeLock&&modeLock!=null)mode = modeLock;
 setMode(mode);
 var lastLine = 0;
 
@@ -20,10 +24,12 @@ async function scanLog() {
         timer = setInterval(scanLog, updateInterval);
 	}
 
-    let newMode = window.localStorage.getItem("ovrt_watchdog:mode");
-    if(!newMode||newMode==null)newMode = "background";
-    if(newMode!==mode){
-        setMode(newMode);
+    if(!modeLock||modeLock==null){
+        let newMode = window.localStorage.getItem("ovrt_watchdog:mode");
+        if(!newMode||newMode==null)newMode = "background";
+        if(newMode!==mode){
+            setMode(newMode);
+        }
     }
 	
     var lines = contents.split("\n");
@@ -67,14 +73,18 @@ async function setMode(newMode){
         if(tf.posX+tf.posY+tf.posZ>2000){
             ovrly.bringToMe();//very unlikely you'll have it 2km away aside from background mode
             ovrly.setOpacity(1);
-            ovrly.setFramerate(60);
         }
+        ovrly.setFramerate(60);
         ovrly.setRenderingEnabled(true);
         ovrly.setBrowserOptionsEnabled(false);
     }
 }
 var logEvents = [];
 function logEvent(str){
+    let date = new Date();
+    let timestamp = date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()+" ";
+    str = insertInsidePTag(str, timestamp);
+
     logEvents.push(str);
     if(logEvents.length>1000)logEvents = logEvents.splice(0, 1);
     let s = "";
@@ -82,6 +92,22 @@ function logEvent(str){
     document.getElementById("console").innerHTML = s;
     window.scrollTo(0, document.body.scrollHeight);
 }
+
+//ChatGPT :3
+function insertInsidePTag(inputString, textToInsert) {
+    // Check if the inputString starts with a <p tag
+    const pTagStartIndex = inputString.indexOf('<p');
+    const pTagEndIndex = inputString.indexOf('>', pTagStartIndex);
+    
+    if (pTagStartIndex === 0 && pTagEndIndex !== -1) {
+        // If found, insert textToInsert right after the opening <p tag
+        return inputString.slice(0, pTagEndIndex + 1) + textToInsert + inputString.slice(pTagEndIndex + 1);
+    } else {
+        // If not found, insert textToInsert at the beginning of the inputString
+        return textToInsert + inputString;
+    }
+}
+
 function log(title, message){
     if(mode==="console")logEvent("INFO ["+title+"] "+message);
 }

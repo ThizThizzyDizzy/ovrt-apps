@@ -1,0 +1,2 @@
+watchdog.html?mode=console
+2048 2048
