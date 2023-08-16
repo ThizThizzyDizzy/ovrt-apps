@@ -95,7 +95,7 @@ API.on("device-position", function (event){
     deviceUpdates[event.deviceId] = event.deviceInfo;
     sendDeviceOSC(event.deviceId, event.deviceInfo);
 });
-API.on("message", function (event){
+API.on("overlay-message", function (event){
     let msg = event.message;
     if(msg&&msg.app==="WindowAnchor"&&msg.event==="detach"){
         detachWindow(msg.window);

@@ -13,6 +13,21 @@ var lastLine = 0;
 var updateInterval = 100;
 var timer = setInterval(scanLog, updateInterval);
 
+API.on("overlay-message", function (event){
+    let msg = event.message;
+    if(msg){
+        if(msg.event==="log"||msg.event==="info"){
+            log(msg.app, msg.message);
+        }
+        if(msg.event==="warn"||msg.event==="warning"){
+            warn(msg.app, msg.message);
+        }
+        if(msg.event==="err"||msg.event==="error"){
+            error(msg.app, msg.message);
+        }
+    }
+});
+
 async function scanLog() {
     let path = await API.getLastModifiedFileInDirectory("OVRT-LocalLow/Curtis English/OVR Toolkit/");
     let contents = await API.getFileStringContents(path+"/../Player.log");
