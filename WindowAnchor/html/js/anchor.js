@@ -566,7 +566,7 @@ async function getWindows(tf){
         let id = overlays[i];
         let overlay = new OVRTOverlay(id);
         let transform = transforms[i];
-        if(transform.attachedDevice===tf.attachedDevice&&id!==uid){
+        if(transform.attachedDevice===tf.attachedDevice&&id!==uid&&transform.shouldSave){
             windows[id] = {
                 overlay: overlay,
                 transform: transform
