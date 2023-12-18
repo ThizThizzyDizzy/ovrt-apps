@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="index.css">
+        <title>Aincrad K/D Logger</title>
+    </head>
+    <body>
+        <label class="title">Aincrad K/D Logger</label>
+        <button class="enable" onclick="initLogger()">Enable</button>
+        <label class="warning">Note: this may use a lot of CPU usage in very long sessions or if VRChat has a mental breakdown</label>
+        <label class="output" id="openedText"></label>
+        <button class="mode-console" onclick="setMode('console')">Console Mode</button>
+        <button class="mode-background" onclick="setMode('background')">Background Mode</button>
+        <script src="js/helper.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
