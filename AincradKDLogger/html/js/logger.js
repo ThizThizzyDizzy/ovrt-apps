@@ -144,7 +144,7 @@ function logConsole(str){
         }
     }
 
-    document.getElementById("console").innerHTML = s;
+    document.getElementById("console").innerHTML = s.replace(/Player: Valmouse/g, "Val: Val");
     window.scrollTo(0, document.body.scrollHeight);
 }
 function fmt(num){
@@ -165,7 +165,7 @@ function insertInsidePTag(str, text){
 }
 
 function logEvent(event){
-    if(mode==="background")API.sendNotification("Aincrad K/D Logger", event);
+    if(mode==="background")API.sendNotification("Aincrad K/D Logger", event.replace(/Player: Valmouse/g, "Val: Val"));
     let eventS = [event.split(" ")[0],event.split(" ").slice(1).join(' ')];
     let eventType = eventS[0];
     let eventSubjects = eventS[1].split(":")[0].includes("|")?[eventS[1].split("|")[0],eventS[1].split("|").slice(1).join("|")]:[eventS[1]];
