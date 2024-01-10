@@ -11,7 +11,7 @@ async function initLogger(){
 			"rotX": 0, 
 			"rotY": 0, 
 			"rotZ": 0, 
-			"size": 0.3, 
+			"size": 0.2, 
 			"opacity": 0.001, 
 			"curvature": 0, 
 			"framerate": 1, 
@@ -22,8 +22,8 @@ async function initLogger(){
 		});
 		logger.setContent(0, {
 			"url": "logger.html",
-			"width": 2048,
-			"height": 2048
+			"width": 768,
+			"height": 768
 		});
 		logger.setPinned(true);
 		logger.setBrowserOptionsEnabled(false);
